@@ -3,37 +3,40 @@ using UnityEngine;
 namespace HiddenResidue.Player
 {
     /// <summary>
-    /// CameraFollow — Kamera mengikuti player dengan smooth damp.
+    /// CameraFollow — Kamera mengikuti player dengan smooth damp
+    /// dan memiliki batas kamera (Top, Bottom, Left, Right).
     /// Attach ke Main Camera.
-    ///
-    /// Opsional: set batas kamera agar tidak keluar dari level (boundary).
     /// </summary>
     public class CameraFollow : MonoBehaviour
     {
-        // ─── Inspector ───────────────────────────────────────────────────────
+        // ─── Target ─────────────────────────────────────────
         [Header("Target")]
-        [SerializeField] private Transform target;   // Drag Jojo ke sini
+        [SerializeField] private Transform target;
 
+        // ─── Follow Settings ────────────────────────────────
         [Header("Follow Settings")]
-        [SerializeField] private float smoothTime   = 0.15f;
-        [SerializeField] private Vector3 offset     = new Vector3(0f, 0f, -10f);
+        [SerializeField] private float smoothTime = 0.15f;
+        [SerializeField] private Vector3 offset = new Vector3(0f, 0f, -10f);
 
-        [Header("Boundary (opsional, isi jika ingin batasi kamera)")]
-        [SerializeField] private bool  useBoundary = false;
-        [SerializeField] private float minX = -10f, maxX = 10f;
-        [SerializeField] private float minY = -10f, maxY = 10f;
+        // ─── Boundary Kamera ────────────────────────────────
+        [Header("Camera Boundary")]
+        [SerializeField] private bool useBoundary = true;
 
-        // ─── State ───────────────────────────────────────────────────────────
+        [SerializeField] private float left = -10f;
+        [SerializeField] private float right = 10f;
+        [SerializeField] private float top = 10f;
+        [SerializeField] private float bottom = -10f;
+
+        // ─── Internal ───────────────────────────────────────
         private Vector3 velocity = Vector3.zero;
 
-        // ─────────────────────────────────────────────────────────────────────
         private void Start()
         {
-            // Auto-find player jika belum di-assign
             if (target == null)
             {
-                var player = GameObject.FindGameObjectWithTag("Player");
-                if (player != null) target = player.transform;
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                    target = player.transform;
             }
         }
 
@@ -41,23 +44,29 @@ namespace HiddenResidue.Player
         {
             if (target == null) return;
 
-            Vector3 desired = target.position + offset;
+            // Posisi target kamera
+            Vector3 desiredPosition = target.position + offset;
 
-            // Clamp ke boundary jika aktif
             if (useBoundary)
             {
-                desired.x = Mathf.Clamp(desired.x, minX, maxX);
-                desired.y = Mathf.Clamp(desired.y, minY, maxY);
+                desiredPosition.x = Mathf.Clamp(desiredPosition.x, left, right);
+                desiredPosition.y = Mathf.Clamp(desiredPosition.y, bottom, top);
             }
 
             transform.position = Vector3.SmoothDamp(
-                transform.position, desired, ref velocity, smoothTime);
+                transform.position,
+                desiredPosition,
+                ref velocity,
+                smoothTime
+            );
         }
 
-        // ─── Public API ──────────────────────────────────────────────────────
-        public void SetTarget(Transform newTarget) => target = newTarget;
+        // ─── API ────────────────────────────────────────────
+        public void SetTarget(Transform newTarget)
+        {
+            target = newTarget;
+        }
 
-        /// <summary>Langsung snap kamera ke posisi target (tanpa smooth).</summary>
         public void SnapToTarget()
         {
             if (target == null) return;

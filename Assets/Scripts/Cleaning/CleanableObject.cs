@@ -15,9 +15,11 @@ namespace HiddenResidue.Interaction
         [SerializeField] private float cleanDuration = 2.5f;
         [SerializeField] private bool holdToClean = false;
 
+        [Header("Interaction")]
+        [SerializeField] private float interactionRadius = 1.5f;
+
         [Header("UI")]
-        [SerializeField] private GameObject progressBarRoot;
-        [SerializeField] private Image progressImage; // ganti slider jadi image
+        [SerializeField] private Image progressImage;
         [SerializeField] private TextMeshProUGUI labelText;
 
         [Header("Effects")]
@@ -29,22 +31,46 @@ namespace HiddenResidue.Interaction
         private bool isCleaned = false;
         private bool isCleaning = false;
         private float progress = 0f;
+
         private SpriteRenderer sr;
+        private Transform player;
 
         private void Awake()
         {
             sr = GetComponent<SpriteRenderer>();
-            if (dirtySprite != null) sr.sprite = dirtySprite;
 
-            progressBarRoot?.SetActive(false);
+            var p = GameObject.FindGameObjectWithTag("Player");
+            if (p != null) player = p.transform;
+
+            if (dirtySprite != null)
+                sr.sprite = dirtySprite;
+
+            if (labelText != null)
+                labelText.gameObject.SetActive(false);
 
             if (progressImage != null)
+            {
                 progressImage.fillAmount = 0f;
+                progressImage.gameObject.SetActive(false);
+            }
         }
 
         public void Interact()
         {
             if (isCleaned || isCleaning) return;
+
+            if (labelText)
+            {
+                labelText.gameObject.SetActive(true);
+                labelText.text = "Cleaning...";
+            }
+
+            if (progressImage)
+            {
+                progressImage.gameObject.SetActive(true);
+                progressImage.fillAmount = 0f;
+            }
+
             StartCoroutine(DoClean());
         }
 
@@ -53,11 +79,20 @@ namespace HiddenResidue.Interaction
             isCleaning = true;
             progress = 0f;
 
-            progressBarRoot?.SetActive(true);
-            if (labelText) labelText.text = "Membersihkan...";
-
             while (progress < 1f)
             {
+                if (player == null)
+                    yield break;
+
+                float dist = Vector2.Distance(player.position, transform.position);
+
+                // Jika keluar radius → cancel cleaning
+                if (dist > interactionRadius)
+                {
+                    CancelCleaning();
+                    yield break;
+                }
+
                 if (holdToClean && !UnityEngine.InputSystem.Keyboard.current.eKey.isPressed)
                 {
                     yield return null;
@@ -67,13 +102,28 @@ namespace HiddenResidue.Interaction
                 progress += Time.deltaTime / cleanDuration;
                 progress = Mathf.Clamp01(progress);
 
-                if (progressImage != null)
+                if (progressImage)
                     progressImage.fillAmount = progress;
 
                 yield return null;
             }
 
             FinishCleaning();
+        }
+
+        private void CancelCleaning()
+        {
+            isCleaning = false;
+            progress = 0f;
+
+            if (progressImage)
+                progressImage.fillAmount = 0f;
+
+            if (labelText)
+                labelText.gameObject.SetActive(false);
+
+            if (progressImage)
+                progressImage.gameObject.SetActive(false);
         }
 
         private void FinishCleaning()
@@ -84,23 +134,25 @@ namespace HiddenResidue.Interaction
             if (cleanSprite != null)
                 sr.sprite = cleanSprite;
 
-            progressBarRoot?.SetActive(false);
-
             if (cleanEffect != null)
                 Instantiate(cleanEffect, transform.position, Quaternion.identity);
+
+            if (labelText)
+                labelText.gameObject.SetActive(false);
+
+            if (progressImage)
+                progressImage.gameObject.SetActive(false);
 
             Core.ScoreManager.Instance?.AddCleanScore();
             Core.LevelManager.Instance?.RegisterCleaned();
 
             UI.ScorePopupUI.Show(transform.position, Core.ScoreManager.Instance?.GetCleanScore() ?? 10);
-
-            Debug.Log($"[CleanableObject] {gameObject.name} selesai dibersihkan.");
         }
 
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, 0.3f);
+            Gizmos.DrawWireSphere(transform.position, interactionRadius);
         }
     }
 }
