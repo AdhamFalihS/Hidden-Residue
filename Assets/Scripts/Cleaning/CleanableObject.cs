@@ -7,6 +7,15 @@ namespace HiddenResidue.Interaction
 {
     public class CleanableObject : MonoBehaviour, IInteractable
     {
+        public enum CleanMode
+        {
+            ChangeSprite,   // Dirty → Clean
+            DestroyObject   // Object hilang
+        }
+
+        [Header("Mode")]
+        [SerializeField] private CleanMode cleanMode = CleanMode.ChangeSprite;
+
         [Header("Sprites")]
         [SerializeField] private Sprite dirtySprite;
         [SerializeField] private Sprite cleanSprite;
@@ -42,7 +51,8 @@ namespace HiddenResidue.Interaction
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p != null) player = p.transform;
 
-            if (dirtySprite != null)
+            // Set awal sprite dirty
+            if (cleanMode == CleanMode.ChangeSprite && dirtySprite != null)
                 sr.sprite = dirtySprite;
 
             if (labelText != null)
@@ -86,7 +96,6 @@ namespace HiddenResidue.Interaction
 
                 float dist = Vector2.Distance(player.position, transform.position);
 
-                // Jika keluar radius → cancel cleaning
                 if (dist > interactionRadius)
                 {
                     CancelCleaning();
@@ -131,9 +140,23 @@ namespace HiddenResidue.Interaction
             isCleaned = true;
             isCleaning = false;
 
-            if (cleanSprite != null)
-                sr.sprite = cleanSprite;
+            // 🔥 MODE 1: Change Sprite
+            if (cleanMode == CleanMode.ChangeSprite)
+            {
+                if (cleanSprite != null)
+                    sr.sprite = cleanSprite;
+            }
+            // 🔥 MODE 2: Destroy Object
+            else if (cleanMode == CleanMode.DestroyObject)
+            {
+                if (cleanEffect != null)
+                    Instantiate(cleanEffect, transform.position, Quaternion.identity);
 
+                Destroy(gameObject);
+                return;
+            }
+
+            // Effect
             if (cleanEffect != null)
                 Instantiate(cleanEffect, transform.position, Quaternion.identity);
 

@@ -8,31 +8,33 @@ namespace HiddenResidue.Player
     [RequireComponent(typeof(SpriteRenderer))]
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("Kecepatan Gerak")]
-        [SerializeField] private float moveSpeed    = 4f;
+        [Header("Movement Settings")]
+        [SerializeField] private float moveSpeed = 4f;
         [SerializeField] private float acceleration = 15f;
         [SerializeField] private float deceleration = 20f;
 
-        [Header("Parameter Animator")]
-        [SerializeField] private string paramSpeedX = "SpeedX";
-        [SerializeField] private string paramSpeedY = "SpeedY";
+        [Header("Animator Parameters")]
+        [SerializeField] private string paramMoveX = "MoveX";
+        [SerializeField] private string paramMoveY = "MoveY";
+        [SerializeField] private string paramSpeed = "Speed";
 
-        private Rigidbody2D    rb;
-        private Animator       animator;
+        private Rigidbody2D rb;
+        private Animator animator;
         private SpriteRenderer sr;
-        private Vector2        moveInput;
-        private Vector2        currentVelocity;
-        private bool           canMove = true;
+
+        private Vector2 moveInput;
+        private Vector2 currentVelocity;
+        private bool canMove = true;
 
         private void Awake()
         {
-            rb       = GetComponent<Rigidbody2D>();
+            rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            sr       = GetComponent<SpriteRenderer>();
+            sr = GetComponent<SpriteRenderer>();
 
-            rb.freezeRotation         = true;
-            rb.gravityScale           = 0f;
-            rb.interpolation          = RigidbodyInterpolation2D.Interpolate;
+            rb.freezeRotation = true;
+            rb.gravityScale = 0f;
+            rb.interpolation = RigidbodyInterpolation2D.Interpolate;
             rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         }
 
@@ -48,43 +50,55 @@ namespace HiddenResidue.Player
         {
             if (!canMove)
             {
-                currentVelocity   = Vector2.MoveTowards(currentVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
+                currentVelocity = Vector2.MoveTowards(currentVelocity, Vector2.zero, deceleration * Time.fixedDeltaTime);
                 rb.linearVelocity = currentVelocity;
+                UpdateAnimator();
                 return;
             }
 
             Vector2 targetVelocity = moveInput.normalized * moveSpeed;
-            float   rate           = moveInput.sqrMagnitude > 0.01f ? acceleration : deceleration;
-            currentVelocity        = Vector2.MoveTowards(currentVelocity, targetVelocity, rate * Time.fixedDeltaTime);
-            rb.linearVelocity      = currentVelocity;
+            float rate = moveInput.sqrMagnitude > 0.01f ? acceleration : deceleration;
 
-            UpdateAnimatorAndSprite();
+            currentVelocity = Vector2.MoveTowards(currentVelocity, targetVelocity, rate * Time.fixedDeltaTime);
+            rb.linearVelocity = currentVelocity;
+
+            UpdateAnimator();
         }
 
-        private void UpdateAnimatorAndSprite()
+        private void UpdateAnimator()
         {
-            animator.SetFloat(paramSpeedX, Mathf.Abs(currentVelocity.x));
-            animator.SetFloat(paramSpeedY, currentVelocity.y);
+            // Arah (untuk Blend Tree 2D)
+            animator.SetFloat(paramMoveX, moveInput.x);
+            animator.SetFloat(paramMoveY, moveInput.y);
 
-            if (moveInput.x > 0.01f)       sr.flipX = false;
-            else if (moveInput.x < -0.01f) sr.flipX = true;
+            // Speed untuk idle / jalan
+            animator.SetFloat(paramSpeed, moveInput.sqrMagnitude);
+
+            // Flip sprite (opsional, kalau pakai animasi kanan saja)
+            if (moveInput.x > 0.01f)
+                sr.flipX = false;
+            else if (moveInput.x < -0.01f)
+                sr.flipX = true;
         }
 
         private void HandleGameStateChanged(Core.GameManager.GameState state)
         {
             canMove = state == Core.GameManager.GameState.Playing;
+
             if (!canMove)
             {
-                moveInput         = Vector2.zero;
-                currentVelocity   = Vector2.zero;
+                moveInput = Vector2.zero;
+                currentVelocity = Vector2.zero;
                 rb.linearVelocity = Vector2.zero;
-                animator.SetFloat(paramSpeedX, 0f);
-                animator.SetFloat(paramSpeedY, 0f);
+
+                animator.SetFloat(paramMoveX, 0f);
+                animator.SetFloat(paramMoveY, 0f);
+                animator.SetFloat(paramSpeed, 0f);
             }
         }
 
-        public void    SetCanMove(bool value) => canMove = value;
-        public bool    IsMoving  => moveInput.sqrMagnitude > 0.01f;
+        public void SetCanMove(bool value) => canMove = value;
+        public bool IsMoving => moveInput.sqrMagnitude > 0.01f;
         public Vector2 MoveInput => moveInput;
     }
 }
