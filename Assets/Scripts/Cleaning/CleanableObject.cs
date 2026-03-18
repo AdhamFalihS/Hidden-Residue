@@ -48,10 +48,12 @@ namespace HiddenResidue.Interaction
         {
             sr = GetComponent<SpriteRenderer>();
 
+            // Cari player
             var p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) player = p.transform;
+            if (p != null)
+                player = p.transform;
 
-            // Set awal sprite dirty
+            // Set sprite awal (dirty)
             if (cleanMode == CleanMode.ChangeSprite && dirtySprite != null)
                 sr.sprite = dirtySprite;
 
@@ -91,17 +93,18 @@ namespace HiddenResidue.Interaction
 
             while (progress < 1f)
             {
-                if (player == null)
-                    yield break;
+                if (player == null) yield break;
 
                 float dist = Vector2.Distance(player.position, transform.position);
 
+                // 🔥 Keluar dari radius → cancel
                 if (dist > interactionRadius)
                 {
                     CancelCleaning();
                     yield break;
                 }
 
+                // HOLD MODE
                 if (holdToClean && !UnityEngine.InputSystem.Keyboard.current.eKey.isPressed)
                 {
                     yield return null;
@@ -126,51 +129,49 @@ namespace HiddenResidue.Interaction
             progress = 0f;
 
             if (progressImage)
+            {
                 progressImage.fillAmount = 0f;
+                progressImage.gameObject.SetActive(false);
+            }
 
             if (labelText)
                 labelText.gameObject.SetActive(false);
-
-            if (progressImage)
-                progressImage.gameObject.SetActive(false);
         }
 
         private void FinishCleaning()
-        {
-            isCleaned = true;
-            isCleaning = false;
+{
+    isCleaned = true;
+    isCleaning = false;
 
-            // 🔥 MODE 1: Change Sprite
-            if (cleanMode == CleanMode.ChangeSprite)
-            {
-                if (cleanSprite != null)
-                    sr.sprite = cleanSprite;
-            }
-            // 🔥 MODE 2: Destroy Object
-            else if (cleanMode == CleanMode.DestroyObject)
-            {
-                if (cleanEffect != null)
-                    Instantiate(cleanEffect, transform.position, Quaternion.identity);
+    if (progressImage) progressImage.gameObject.SetActive(false);
+    if (labelText) labelText.gameObject.SetActive(false);
 
-                Destroy(gameObject);
-                return;
-            }
+    // --- 1. JALANKAN LOGIKA SKOR TERLEBIH DAHULU ---
+    // Pastikan skor ditambah SEBELUM objek di-destroy
+    Core.ScoreManager.Instance?.AddCleanScore();
+    Core.LevelManager.Instance?.RegisterCleaned();
 
-            // Effect
-            if (cleanEffect != null)
-                Instantiate(cleanEffect, transform.position, Quaternion.identity);
+    UI.ScorePopupUI.Show(
+        transform.position,
+        Core.ScoreManager.Instance?.GetCleanScore() ?? 10
+    );
 
-            if (labelText)
-                labelText.gameObject.SetActive(false);
+    // --- 2. JALANKAN EFEK VISUAL ---
+    if (cleanEffect != null)
+        Instantiate(cleanEffect, transform.position, Quaternion.identity);
 
-            if (progressImage)
-                progressImage.gameObject.SetActive(false);
-
-            Core.ScoreManager.Instance?.AddCleanScore();
-            Core.LevelManager.Instance?.RegisterCleaned();
-
-            UI.ScorePopupUI.Show(transform.position, Core.ScoreManager.Instance?.GetCleanScore() ?? 10);
-        }
+    // --- 3. TENTUKAN NASIB OBJEK ---
+    if (cleanMode == CleanMode.ChangeSprite)
+    {
+        if (cleanSprite != null)
+            sr.sprite = cleanSprite;
+    }
+    else if (cleanMode == CleanMode.DestroyObject)
+    {
+        // Hancurkan objek di akhir agar semua kode di atas sempat jalan
+        Destroy(gameObject);
+    }
+}
 
         private void OnDrawGizmosSelected()
         {
