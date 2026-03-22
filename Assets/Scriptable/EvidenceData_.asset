@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Evidence.EvidenceData
   evidenceName: Kartu Identitas
   description: Kartu identitas korban yang tertinggal di bawah meja.
-  icon: {fileID: 1428637733, guid: cb3bcf6afed26874e80f2a1c118ed62a, type: 3}
+  icon: {fileID: 807456893564079626, guid: a74a9e898ab0a6f46bdf601e0aa03bdb, type: 3}
   evidenceID: evidence_001

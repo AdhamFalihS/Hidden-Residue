@@ -5,8 +5,6 @@ namespace HiddenResidue.Evidence
     /// <summary>
     /// EvidenceObject — Barang bukti tersembunyi di level.
     /// Pemain menekan E → barang masuk inventory, objek hilang dari scene.
-    ///
-    /// Attach ke setiap prefab barang bukti di scene.
     /// </summary>
     public class EvidenceObject : MonoBehaviour, Interaction.IInteractable
     {
@@ -17,12 +15,12 @@ namespace HiddenResidue.Evidence
         [Header("Visual Hint")]
         [Tooltip("Aktifkan agar objek punya efek glow/shimmer saat player dekat")]
         [SerializeField] private bool  enableGlow = true;
-        [SerializeField] private float glowRadius = 2f;   // Radius untuk mulai glow
+        [SerializeField] private float glowRadius = 2f;
         [SerializeField] private float glowSpeed  = 2f;
-        [SerializeField] private Color glowColor  = new Color(1f, 0.9f, 0.3f, 1f);  // Kuning
+        [SerializeField] private Color glowColor  = new Color(1f, 0.9f, 0.3f, 1f);
 
         [Header("Pickup Effect")]
-        [SerializeField] private GameObject pickupEffect;  // Particle effect saat diambil
+        [SerializeField] private GameObject pickupEffect;
 
         // ─── IInteractable ────────────────────────────────────────────────────
         public bool   CanInteract    => !isPickedUp;
@@ -39,12 +37,22 @@ namespace HiddenResidue.Evidence
         {
             sr            = GetComponent<SpriteRenderer>();
             originalColor = sr != null ? sr.color : Color.white;
+            
+            Debug.Log($"[EvidenceObject] Awake: {gameObject.name}");
         }
 
         private void Start()
         {
             var player = GameObject.FindGameObjectWithTag("Player");
-            if (player) playerTransform = player.transform;
+            if (player) 
+            {
+                playerTransform = player.transform;
+                Debug.Log($"[EvidenceObject] Player found: {player.name}");
+            }
+            else
+            {
+                Debug.LogWarning("[EvidenceObject] Player not found with tag 'Player'");
+            }
         }
 
         private void Update()
@@ -54,7 +62,6 @@ namespace HiddenResidue.Evidence
             float dist = Vector2.Distance(transform.position, playerTransform.position);
             if (dist <= glowRadius)
             {
-                // Pulse glow: interpolasi antara warna asli dan glowColor
                 float t  = (Mathf.Sin(Time.time * glowSpeed) + 1f) / 2f;
                 sr.color = Color.Lerp(originalColor, glowColor, t * 0.6f);
             }
@@ -67,33 +74,57 @@ namespace HiddenResidue.Evidence
         // ─── IInteractable.Interact() ─────────────────────────────────────────
         public void Interact()
         {
-            if (isPickedUp || data == null) return;
+            if (isPickedUp) 
+            {
+                Debug.Log("[EvidenceObject] Already picked up");
+                return;
+            }
+            
+            if (data == null)
+            {
+                Debug.LogError("[EvidenceObject] EvidenceData is null!");
+                return;
+            }
+
+            Debug.Log($"[EvidenceObject] Interact called for: {data.evidenceName}");
 
             isPickedUp = true;
 
+            // CEK EVIDENCE MANAGER
+            if (EvidenceManager.Instance == null)
+            {
+                Debug.LogError("[EvidenceObject] EvidenceManager.Instance is NULL!");
+                return;
+            }
+
             // Tambahkan ke EvidenceManager
-            EvidenceManager.Instance?.AddEvidence(data);
-
+            EvidenceManager.Instance.AddEvidence(data);
+            
             // Efek pickup
-            if (pickupEffect)
+            if (pickupEffect != null)
+            {
                 Instantiate(pickupEffect, transform.position, Quaternion.identity);
+                Debug.Log("[EvidenceObject] Pickup effect spawned");
+            }
 
-            // Tambah skor
-            Core.ScoreManager.Instance?.AddEvidenceScore();
+            // Tambah skor (cek dulu)
+            if (Core.ScoreManager.Instance != null)
+                Core.ScoreManager.Instance.AddEvidenceScore();
 
-            // Beritahu level manager
-            Core.LevelManager.Instance?.RegisterEvidenceFound();
+            // Beritahu level manager (cek dulu)
+            if (Core.LevelManager.Instance != null)
+                Core.LevelManager.Instance.RegisterEvidenceFound();
 
-            // Tampilkan notifikasi
+            // Tampilkan notifikasi (cek dulu)
             UI.NotificationUI.Show($"Barang Bukti Ditemukan: {data.evidenceName}");
 
-            // Tampilkan score popup
+            // Tampilkan score popup (cek dulu)
             UI.ScorePopupUI.Show(transform.position, Core.ScoreManager.Instance?.GetEvidenceScore() ?? 25);
 
             // Sembunyikan objek
             gameObject.SetActive(false);
 
-            Debug.Log($"[EvidenceObject] Ditemukan: {data.evidenceName}");
+            Debug.Log($"[EvidenceObject] SUCCESS: {data.evidenceName} added to inventory");
         }
     }
 }

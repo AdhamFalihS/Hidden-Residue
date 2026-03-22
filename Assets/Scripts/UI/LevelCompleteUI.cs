@@ -3,19 +3,6 @@ using TMPro;
 
 namespace HiddenResidue.UI
 {
-    /// <summary>
-    /// LevelCompleteUI — Layar "LEVEL SELESAI" beserta total skor.
-    ///
-    /// Attach ke: GameObject "LevelCompletePanel" di Canvas.
-    ///
-    /// Struktur UI:
-    ///   LevelCompletePanel
-    ///   ├── TitleText          (TextMeshProUGUI — "LEVEL SELESAI!")
-    ///   ├── LevelNameText      (TextMeshProUGUI — nama level, opsional)
-    ///   ├── TotalScoreText     (TextMeshProUGUI — "Total Skor: 250")
-    ///   ├── NextLevelButton    (Button → OnClick: LevelCompleteUI.OnNextLevelClicked)
-    ///   └── MainMenuButton     (Button → OnClick: LevelCompleteUI.OnMainMenuClicked)
-    /// </summary>
     public class LevelCompleteUI : MonoBehaviour
     {
         public static LevelCompleteUI Instance { get; private set; }

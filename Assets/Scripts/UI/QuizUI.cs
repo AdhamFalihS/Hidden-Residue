@@ -4,23 +4,7 @@ using TMPro;
 
 namespace HiddenResidue.UI
 {
-    /// <summary>
-    /// QuizUI — Panel kuis Bahasa Jepang.
-    /// Mendengarkan event dari QuizManager dan menampilkan soal + pilihan jawaban.
-    ///
-    /// Attach ke: GameObject "QuizPanel" di Canvas.
-    ///
-    /// Struktur UI yang dibutuhkan di dalam QuizPanel:
-    ///   ├── QuestionText       (TextMeshProUGUI)
-    ///   ├── TimerSlider        (Slider)
-    ///   ├── TimerText          (TextMeshProUGUI)
-    ///   ├── AnswerButton_0     (Button + TMP child)
-    ///   ├── AnswerButton_1     (Button + TMP child)
-    ///   ├── AnswerButton_2     (Button + TMP child)
-    ///   ├── AnswerButton_3     (Button + TMP child)
-    ///   └── ResultPanel        (Panel, hidden awal)
-    ///         └── ResultText   (TextMeshProUGUI)
-    /// </summary>
+
     public class QuizUI : MonoBehaviour
     {
         public static QuizUI Instance { get; private set; }

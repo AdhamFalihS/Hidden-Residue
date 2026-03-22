@@ -24,26 +24,60 @@ namespace HiddenResidue.Evidence
         // ─────────────────────────────────────────────────────────────────────
         private void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+            // Cek instance
+            if (Instance != null && Instance != this) 
+            { 
+                Destroy(gameObject); 
+                return; 
+            }
+            
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            
+            // Hanya DontDestroyOnLoad untuk persistent manager
+            // Jangan DontDestroyOnLoad dulu untuk testing
+            // DontDestroyOnLoad(gameObject);
+            
+            Debug.Log("[EvidenceManager] Initialized");
+        }
+
+        private void Start()
+        {
+            Debug.Log($"[EvidenceManager] Started. Total evidence: {foundEvidence.Count}");
         }
 
         // ─── Public API ──────────────────────────────────────────────────────
 
         public void AddEvidence(EvidenceData data)
         {
-            if (data == null) return;
-            if (foundEvidence.Contains(data)) return;  // Hindari duplikat
+            if (data == null) 
+            {
+                Debug.LogError("[EvidenceManager] Cannot add null evidence!");
+                return;
+            }
+            
+            if (foundEvidence.Contains(data)) 
+            {
+                Debug.Log($"[EvidenceManager] Evidence {data.evidenceName} already exists!");
+                return;  // Hindari duplikat
+            }
 
             foundEvidence.Add(data);
-            OnEvidenceAdded?.Invoke(data);
             Debug.Log($"[EvidenceManager] Added: {data.evidenceName} | Total: {foundEvidence.Count}");
+            
+            // Broadcast event
+            OnEvidenceAdded?.Invoke(data);
+            
+            // Tambahkan log untuk cek listener
+            Debug.Log($"[EvidenceManager] OnEvidenceAdded invoked. Listeners: {(OnEvidenceAdded != null ? "Yes" : "No")}");
         }
 
         public bool HasEvidence(EvidenceData data) => foundEvidence.Contains(data);
         public bool HasEvidence(string id)         => foundEvidence.Exists(e => e.evidenceID == id);
 
-        public void ClearAll() => foundEvidence.Clear();
+        public void ClearAll() 
+        {
+            foundEvidence.Clear();
+            Debug.Log("[EvidenceManager] All evidence cleared");
+        }
     }
 }

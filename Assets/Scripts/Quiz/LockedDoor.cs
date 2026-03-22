@@ -3,84 +3,80 @@ using UnityEngine;
 namespace HiddenResidue.Quiz
 {
     /// <summary>
-    /// LockedDoor — Pintu atau area terkunci yang membutuhkan kuis untuk dibuka.
-    /// Attach ke objek pintu di scene.
-    /// Saat E ditekan → QuizManager.StartQuiz() → jika benar → pintu terbuka.
+    /// LockedDoor — Pintu yang memiliki dua state visual (Locked & Open).
+    /// Attach script ini ke Parent Object (misal: QuizDoor).
     /// </summary>
     public class LockedDoor : MonoBehaviour, Interaction.IInteractable
     {
-        // ─── Inspector ───────────────────────────────────────────────────────
-        [Header("Quiz")]
-        [SerializeField] private QuizData quizData;   // Drag QuizData SO ke sini
+        [Header("Quiz Data")]
+        [SerializeField] private QuizData quizData;
 
-        [Header("Door Behavior")]
-        [SerializeField] private GameObject doorObject;          // Objek visual pintu
-        [SerializeField] private Collider2D doorBlocker;         // Collider penghalang
-        [Tooltip("Kalimat hint sebelum buka kuis")]
+        [Header("Door Visual States")]
+        [Tooltip("GameObject untuk visual pintu tertutup (biasanya punya Collider2D)")]
+        [SerializeField] private GameObject lockedVisual; 
+        
+        [Tooltip("GameObject untuk visual pintu terbuka (biasanya tanpa Collider2D)")]
+        [SerializeField] private GameObject openVisual;
+
+        [Header("Settings")]
         [SerializeField] private string lockedPrompt = "Tekan E — Jawab Kuis untuk Membuka";
 
-        [Header("Animation (opsional)")]
-        [SerializeField] private Animator doorAnimator;
-        [SerializeField] private string openTrigger = "Open";
-
-        [Header("Audio (opsional)")]
+        [Header("Audio (Opsional)")]
         [SerializeField] private AudioClip openSound;
         [SerializeField] private AudioClip lockedSound;
 
-        // ─── IInteractable ────────────────────────────────────────────────────
-        public bool   CanInteract    => !isUnlocked;
+        // ─── IInteractable Implementation ──────────────────────────────────────
+        public bool CanInteract => !isUnlocked;
         public string InteractPrompt => lockedPrompt;
 
-        // ─── State ───────────────────────────────────────────────────────────
-        private bool         isUnlocked = false;
-        private AudioSource  audioSource;
+        // ─── Private State ──────────────────────────────────────────────────────
+        private bool isUnlocked = false;
+        private AudioSource audioSource;
 
-        // ─────────────────────────────────────────────────────────────────────
         private void Awake()
         {
+            // Mengambil AudioSource dari object ini (jika ada)
             audioSource = GetComponent<AudioSource>();
         }
 
-        // ─── IInteractable.Interact() ─────────────────────────────────────────
+        private void Start()
+        {
+            // Setup kondisi awal pintu saat game dimulai
+            if (lockedVisual != null) lockedVisual.SetActive(true);
+            if (openVisual != null)   openVisual.SetActive(false);
+        }
+
         public void Interact()
         {
             if (isUnlocked || quizData == null) return;
 
-            // Mainkan suara terkunci
+            // Suara saat mencoba buka pintu yang masih terkunci
             if (lockedSound && audioSource) audioSource.PlayOneShot(lockedSound);
 
-            // Tampilkan kuis
+            // Munculkan UI Kuis
             QuizManager.Instance?.StartQuiz(quizData, OnQuizResult);
         }
 
-        // ─── Callback dari QuizManager ────────────────────────────────────────
         private void OnQuizResult(bool passed)
         {
             if (passed)
+            {
                 OpenDoor();
-            // Jika gagal, GameManager sudah handle TriggerFail()
+            }
         }
 
         private void OpenDoor()
         {
             isUnlocked = true;
 
-            // Animasi pintu terbuka
-            if (doorAnimator != null)
-                doorAnimator.SetTrigger(openTrigger);
+            // Tukar visual: Matikan yang terkunci, nyalakan yang terbuka
+            if (lockedVisual != null) lockedVisual.SetActive(false);
+            if (openVisual != null)   openVisual.SetActive(true);
 
-            // Nonaktifkan collider penghalang
-            if (doorBlocker != null)
-                doorBlocker.enabled = false;
-
-            // Sembunyikan visual pintu (jika tidak ada animasi)
-            if (doorAnimator == null && doorObject != null)
-                doorObject.SetActive(false);
-
-            // Suara pintu terbuka
+            // Play SFX Terbuka
             if (openSound && audioSource) audioSource.PlayOneShot(openSound);
 
-            Debug.Log($"[LockedDoor] {gameObject.name} terbuka!");
+            Debug.Log($"[LockedDoor] {gameObject.name} berhasil dibuka!");
         }
     }
 }
