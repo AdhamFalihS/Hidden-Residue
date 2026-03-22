@@ -23,13 +23,7 @@ namespace HiddenResidue.UI
 
         [Header("Panel")]
         [SerializeField] private GameObject  failPanel;
-        [SerializeField] private CanvasGroup canvasGroup;   // Untuk animasi fade-in
 
-        [Header("Teks")]
-        [SerializeField] private TextMeshProUGUI failReasonText;
-
-        [Header("Animasi")]
-        [SerializeField] private float fadeInDuration = 0.6f;
 
         // ─────────────────────────────────────────────────────────────────────
         private void Awake()
@@ -41,13 +35,9 @@ namespace HiddenResidue.UI
         // ─── Public API ───────────────────────────────────────────────────────
 
         /// <summary>Tampilkan layar gagal. Dipanggil oleh GameManager.TriggerFail().</summary>
-        public void Show(string reason = "Jawaban salah atau waktu habis!")
+        public void Show()
         {
             if (failPanel) failPanel.SetActive(true);
-            if (failReasonText) failReasonText.text = reason;
-
-            if (canvasGroup != null)
-                StartCoroutine(FadeIn());
         }
 
         /// <summary>Dipanggil oleh tombol "Coba Lagi".</summary>
@@ -60,21 +50,6 @@ namespace HiddenResidue.UI
         public void OnMainMenuClicked()
         {
             Core.GameManager.Instance?.GoToMainMenu();
-        }
-
-        // ─── Private ──────────────────────────────────────────────────────────
-        private IEnumerator FadeIn()
-        {
-            canvasGroup.alpha = 0f;
-            float elapsed = 0f;
-
-            while (elapsed < fadeInDuration)
-            {
-                elapsed           += Time.unscaledDeltaTime;
-                canvasGroup.alpha  = Mathf.Clamp01(elapsed / fadeInDuration);
-                yield return null;
-            }
-            canvasGroup.alpha = 1f;
         }
     }
 }

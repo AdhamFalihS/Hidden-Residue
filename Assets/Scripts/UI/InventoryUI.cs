@@ -2,337 +2,171 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 namespace HiddenResidue.UI
 {
+    /// <summary>
+    /// InventoryUI — PENTING: Attach script ini ke GameObject PARENT yang SELALU AKTIF
+    /// (misal: "Canvas" atau buat GameObject baru "InventoryManager" di bawah Canvas).
+    /// JANGAN attach ke InventoryUI_Panel langsung, karena saat panel SetActive(false)
+    /// script ini ikut mati dan tidak bisa subscribe event.
+    ///
+    /// Struktur yang benar di Hierarchy:
+    ///   Canvas
+    ///   └── InventoryManager   ← Attach script InventoryUI di sini (selalu aktif)
+    ///       └── InventoryUI_Panel  ← ini yang di show/hide, assign ke "Inventory Panel"
+    ///           └── Scroll View
+    ///               └── Viewport
+    ///                   └── Content  ← assign ke "Grid Parent"
+    /// </summary>
     public class InventoryUI : MonoBehaviour
     {
         public static InventoryUI Instance { get; private set; }
 
-        [Header("Panel Root")]
+        [Header("Panel Root — assign InventoryUI_Panel di sini")]
         [SerializeField] private GameObject inventoryPanel;
 
-        [Header("Grid / List")]
-        [SerializeField] private Transform gridParent;
+        [Header("Grid / List — assign Content (RectTransform) di sini")]
+        [SerializeField] private Transform  gridParent;
         [SerializeField] private GameObject evidenceSlotPrefab;
 
         [Header("Detail Popup")]
-        [SerializeField] private GameObject detailPanel;
-        [SerializeField] private Image detailIcon;
+        [SerializeField] private GameObject      detailPanel;
+        [SerializeField] private Image           detailIcon;
         [SerializeField] private TextMeshProUGUI detailName;
         [SerializeField] private TextMeshProUGUI detailDesc;
 
-        [Header("Debug")]
-        [SerializeField] private bool debugMode = true;
-
-        // ─────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────────────
         private void Awake()
         {
-            // Singleton setup
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
 
-            // Initial state
-            if (inventoryPanel != null)
-            {
-                inventoryPanel.SetActive(false);
-                Debug.Log("[InventoryUI] Panel initialized - OFF");
-            }
-            else
-            {
-                Debug.LogError("[InventoryUI] Inventory Panel TIDAK diassign!");
-            }
-
-            if (detailPanel != null)
-                detailPanel.SetActive(false);
-
-            // Cek komponen penting
+            if (inventoryPanel == null)
+                Debug.LogError("[InventoryUI] 'Inventory Panel' belum di-assign! Drag InventoryUI_Panel ke slot ini.");
             if (gridParent == null)
-                Debug.LogError("[InventoryUI] Grid Parent TIDAK diassign!");
-                
+                Debug.LogError("[InventoryUI] 'Grid Parent' belum di-assign! Drag Content ke slot ini.");
             if (evidenceSlotPrefab == null)
-                Debug.LogError("[InventoryUI] Evidence Slot Prefab TIDAK diassign!");
+                Debug.LogError("[InventoryUI] 'Evidence Slot Prefab' belum di-assign!");
+
+            if (inventoryPanel != null) inventoryPanel.SetActive(false);
+            if (detailPanel != null)    detailPanel.SetActive(false);
         }
 
+        // Script ini attach di parent yang SELALU AKTIF → OnEnable selalu jalan
         private void OnEnable()
         {
-            // Subscribe ke event
-            Evidence.EvidenceManager.OnEvidenceAdded += HandleEvidenceAdded;
+            Evidence.EvidenceManager.OnEvidenceAdded += OnEvidenceAdded;
             Debug.Log("[InventoryUI] Subscribed to OnEvidenceAdded");
         }
 
         private void OnDisable()
         {
-            // Unsubscribe dari event
-            Evidence.EvidenceManager.OnEvidenceAdded -= HandleEvidenceAdded;
-            Debug.Log("[InventoryUI] Unsubscribed from OnEvidenceAdded");
+            Evidence.EvidenceManager.OnEvidenceAdded -= OnEvidenceAdded;
         }
 
         private void Update()
         {
-            // CEK TOMBOL I dengan New Input System
-            if (Keyboard.current != null && Keyboard.current.iKey.wasPressedThisFrame)
-            {
-                Debug.Log("========== Tombol I ditekan ==========");
+            if (Keyboard.current == null) return;
+            if (Keyboard.current.bKey.wasPressedThisFrame)
                 ToggleInventory();
-            }
         }
 
-        // ─────────────────────────────────────────────
-        private void HandleEvidenceAdded(Evidence.EvidenceData data)
+        // ─── Event: evidence baru masuk ──────────────────────────────────────
+        private void OnEvidenceAdded(Evidence.EvidenceData data)
         {
-            Debug.Log($"========== HandleEvidenceAdded Dipanggil ==========");
-            Debug.Log($"[InventoryUI] Evidence ditambahkan: {data?.evidenceName ?? "NULL"}");
-            
-            // Cek apakah inventory sedang terbuka
-            bool isPanelActive = inventoryPanel != null && inventoryPanel.activeSelf;
-            Debug.Log($"[InventoryUI] Panel active: {isPanelActive}");
-            
-            if (isPanelActive)
-            {
-                // Refresh grid
+            Debug.Log($"[InventoryUI] OnEvidenceAdded: {data?.evidenceName}");
+            if (inventoryPanel != null && inventoryPanel.activeSelf)
                 RefreshGrid();
-            }
-            else
-            {
-                Debug.Log("[InventoryUI] Panel tidak aktif, skip refresh");
-            }
         }
 
-        // ─────────────────────────────────────────────
+        // ─── Toggle ──────────────────────────────────────────────────────────
         public void ToggleInventory()
         {
             if (inventoryPanel == null)
             {
-                Debug.LogError("[InventoryUI] Inventory Panel TIDAK diassign!");
+                Debug.LogError("[InventoryUI] inventoryPanel NULL — assign di Inspector!");
                 return;
             }
 
-            bool isOpen = !inventoryPanel.activeSelf;
-            inventoryPanel.SetActive(isOpen);
-            
-            Debug.Log($"[InventoryUI] Inventory {(isOpen ? "DIBUKA" : "DITUTUP")}");
+            bool buka = !inventoryPanel.activeSelf;
+            inventoryPanel.SetActive(buka);
+            Debug.Log($"[InventoryUI] Panel {(buka ? "DIBUKA" : "DITUTUP")}");
 
-            if (isOpen)
+            if (buka)
             {
-                // Refresh grid setiap kali dibuka
-                StartCoroutine(DelayedRefresh());
-                
-                // Tutup detail panel jika ada
-                if (detailPanel != null)
-                    detailPanel.SetActive(false);
-                    
-                // Pause game jika perlu
-                if (Core.GameManager.Instance != null)
-                    Core.GameManager.Instance.PauseGame();
-            }
-            else
-            {
-                // Resume game jika perlu
-                if (Core.GameManager.Instance != null)
-                    Core.GameManager.Instance.ResumeGame();
+                if (detailPanel != null) detailPanel.SetActive(false);
+                RefreshGrid();
             }
         }
 
-        // Coroutine untuk delay refresh (pastikan UI sudah aktif)
-        private IEnumerator DelayedRefresh()
+        // ─── Refresh semua slot ───────────────────────────────────────────────
+        public void RefreshGrid()
         {
-            yield return new WaitForEndOfFrame();
-            RefreshGrid();
-        }
-
-        // ─────────────────────────────────────────────
-        private void RefreshGrid()
-        {
-            Debug.Log("========== Refresh Grid Dimulai ==========");
-            
-            // Validasi komponen
             if (gridParent == null)
             {
-                Debug.LogError("[InventoryUI] Grid Parent NULL!");
+                Debug.LogError("[InventoryUI] gridParent NULL! Assign 'Content' ke slot Grid Parent.");
                 return;
             }
-            
             if (evidenceSlotPrefab == null)
             {
-                Debug.LogError("[InventoryUI] Evidence Slot Prefab NULL!");
+                Debug.LogError("[InventoryUI] evidenceSlotPrefab NULL!");
                 return;
             }
 
-            // Cek EvidenceManager
-            var evidenceManager = Evidence.EvidenceManager.Instance;
-            if (evidenceManager == null)
+            var mgr = Evidence.EvidenceManager.Instance;
+            if (mgr == null) { Debug.LogError("[InventoryUI] EvidenceManager NULL!"); return; }
+
+            // Hapus slot lama
+            for (int i = gridParent.childCount - 1; i >= 0; i--)
+                Destroy(gridParent.GetChild(i).gameObject);
+
+            var list = mgr.FoundEvidence;
+            Debug.Log($"[InventoryUI] RefreshGrid — {list.Count} evidence");
+
+            foreach (var ev in list)
             {
-                Debug.LogError("[InventoryUI] EvidenceManager.Instance NULL!");
-                return;
+                if (ev != null) BuatSlot(ev);
             }
 
-            // Ambil daftar evidence
-            var evidenceList = evidenceManager.FoundEvidence;
-            if (evidenceList == null)
-            {
-                Debug.LogError("[InventoryUI] FoundEvidence list NULL!");
-                return;
-            }
-
-            Debug.Log($"[InventoryUI] Jumlah evidence di manager: {evidenceList.Count}");
-
-            // Hapus semua child yang ada
-            int childCount = gridParent.childCount;
-            Debug.Log($"[InventoryUI] Menghapus {childCount} child lama");
-            
-            foreach (Transform child in gridParent)
-            {
-                Destroy(child.gameObject);
-            }
-
-            // Buat slot untuk setiap evidence
-            if (evidenceList.Count == 0)
-            {
-                Debug.Log("[InventoryUI] Tidak ada evidence untuk ditampilkan");
-                
-                // Optional: Tampilkan pesan "Kosong"
-                // GameObject emptyMsg = Instantiate(emptySlotPrefab, gridParent);
-                // emptyMsg.name = "EmptyMessage";
-            }
-            else
-            {
-                foreach (var evidence in evidenceList)
-                {
-                    Debug.Log($"[InventoryUI] Membuat slot untuk: {evidence.evidenceName}");
-                    CreateEvidenceSlot(evidence);
-                }
-            }
-            
-            // Force layout rebuild
-            if (gridParent.GetComponent<RectTransform>() != null)
-            {
-                LayoutRebuilder.ForceRebuildLayoutImmediate(gridParent.GetComponent<RectTransform>());
-                Debug.Log("[InventoryUI] Layout rebuilt");
-            }
-            
-            Debug.Log("========== Refresh Grid Selesai ==========");
+            var rt = gridParent.GetComponent<RectTransform>();
+            if (rt != null) LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
         }
 
-        private void CreateEvidenceSlot(Evidence.EvidenceData evidence)
+        private void BuatSlot(Evidence.EvidenceData ev)
         {
-            if (evidence == null)
-            {
-                Debug.LogError("[InventoryUI] Evidence data NULL!");
-                return;
-            }
+            var slot = Instantiate(evidenceSlotPrefab, gridParent);
+            slot.name = "Slot_" + ev.evidenceName;
 
-            // Instantiate slot
-            GameObject slot = Instantiate(evidenceSlotPrefab, gridParent);
-            
-            // Set nama object
-            slot.name = $"Slot_{evidence.evidenceName}";
-            
-            // Setup UI
-            SetupSlotUI(slot, evidence);
-            
-            Debug.Log($"[InventoryUI] Slot created: {slot.name}");
-        }
-
-        private void SetupSlotUI(GameObject slot, Evidence.EvidenceData evidence)
-        {
-            // Setup Image (icon)
-            Image[] images = slot.GetComponentsInChildren<Image>();
-            foreach (var img in images)
+            foreach (var img in slot.GetComponentsInChildren<Image>(true))
             {
-                // Skip jika ini adalah background slot itu sendiri
                 if (img.gameObject == slot) continue;
-                
-                if (evidence.icon != null)
-                {
-                    img.sprite = evidence.icon;
-                    Debug.Log($"[InventoryUI] Icon set untuk {evidence.evidenceName}");
-                }
-                else
-                {
-                    Debug.LogWarning($"[InventoryUI] Icon untuk {evidence.evidenceName} null");
-                }
+                if (ev.icon != null) img.sprite = ev.icon;
                 break;
             }
 
-            // Setup Text
-            TextMeshProUGUI tmp = slot.GetComponentInChildren<TextMeshProUGUI>();
-            if (tmp != null)
-            {
-                tmp.text = evidence.evidenceName;
-                Debug.Log($"[InventoryUI] Text set: {evidence.evidenceName}");
-            }
-            else
-            {
-                Debug.LogWarning("[InventoryUI] TextMeshProUGUI tidak ditemukan di prefab");
-            }
+            var tmp = slot.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (tmp != null) tmp.text = ev.evidenceName;
 
-            // Setup Button
-            Button btn = slot.GetComponent<Button>();
+            var btn = slot.GetComponent<Button>();
             if (btn != null)
             {
                 btn.onClick.RemoveAllListeners();
-                btn.onClick.AddListener(() => ShowDetail(evidence));
-                Debug.Log($"[InventoryUI] Button listener added");
-            }
-            else
-            {
-                Debug.LogWarning("[InventoryUI] Button tidak ditemukan di prefab");
+                btn.onClick.AddListener(() => TampilkanDetail(ev));
             }
         }
 
-        private void ShowDetail(Evidence.EvidenceData evidence)
+        // ─── Detail ──────────────────────────────────────────────────────────
+        private void TampilkanDetail(Evidence.EvidenceData ev)
         {
-            Debug.Log($"[InventoryUI] Show detail: {evidence.evidenceName}");
-            
-            if (detailPanel == null)
-            {
-                Debug.LogWarning("[InventoryUI] Detail Panel tidak diassign!");
-                return;
-            }
-
+            if (detailPanel == null) return;
             detailPanel.SetActive(true);
-
-            // Set icon
-            if (detailIcon != null)
-            {
-                if (evidence.icon != null)
-                    detailIcon.sprite = evidence.icon;
-                else
-                    Debug.LogWarning($"[InventoryUI] Icon untuk {evidence.evidenceName} null");
-            }
-
-            // Set nama
-            if (detailName != null)
-                detailName.text = evidence.evidenceName;
-
-            // Set deskripsi
-            if (detailDesc != null)
-                detailDesc.text = evidence.description;
+            if (detailIcon != null && ev.icon != null) detailIcon.sprite = ev.icon;
+            if (detailName != null) detailName.text = ev.evidenceName;
+            if (detailDesc != null) detailDesc.text = ev.description;
         }
 
-        public void CloseDetail()
-        {
-            if (detailPanel != null)
-                detailPanel.SetActive(false);
-        }
-
-        public void CloseInventory()
-        {
-            if (inventoryPanel != null && inventoryPanel.activeSelf)
-            {
-                inventoryPanel.SetActive(false);
-                
-                if (Core.GameManager.Instance != null)
-                    Core.GameManager.Instance.ResumeGame();
-                    
-                Debug.Log("[InventoryUI] Inventory ditutup manual");
-            }
-        }
+        public void CloseDetail()    { if (detailPanel != null) detailPanel.SetActive(false); }
+        public void CloseInventory() { if (inventoryPanel != null) inventoryPanel.SetActive(false); }
     }
 }

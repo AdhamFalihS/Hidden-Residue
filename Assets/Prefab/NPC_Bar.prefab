@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 1925101746496179057}
   - component: {fileID: 772742445986241332}
   - component: {fileID: 3700170516892584034}
-  m_Layer: 0
+  - component: {fileID: 160680930304509900}
+  - component: {fileID: 2533767334781004298}
+  m_Layer: 6
   m_Name: NPC_Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,3 +116,70 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &160680930304509900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3135541018233698197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 244e107f35ab0b94394084a351218e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Quiz.NPCQuizGiver
+  quizData: {fileID: 11400000, guid: 26e829f6f8273c842919648c5915e069, type: 2}
+  rewardPrefab: {fileID: 291474891204574299, guid: e6827616be563c940a5063446208a0a0, type: 3}
+  rewardSpawnOffset: {x: 1.29, y: -0.72}
+  oneTimeReward: 1
+  interactPrompt: "Tekan E \u2014 Bicara dengan NPC"
+  alreadyGivenPrompt: Sudah memberikan hadiah.
+  preQuizMessage: Jawab pertanyaanku untuk mendapatkan hadiah!
+  postQuizMessage: Bagus! Ini hadiahmu.
+  rewardSound: {fileID: 0}
+--- !u!61 &2533767334781004298
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3135541018233698197}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 6.45, y: 15.98}
+    newSize: {x: 6.45, y: 15.98}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 6.45, y: 15.98}
+  m_EdgeRadius: 0

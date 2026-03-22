@@ -29,8 +29,8 @@ namespace HiddenResidue.Core
         [SerializeField] private bool requireAllEvidence = false;
 
         // ─── State ───────────────────────────────────────────────────────────
-        private int cleanedCount   = 0;
-        private int evidenceCount  = 0;
+        private int cleanedCount  = 0;
+        private int evidenceCount = 0;
 
         public int CleanedCount   => cleanedCount;
         public int EvidenceCount  => evidenceCount;
@@ -46,9 +46,13 @@ namespace HiddenResidue.Core
             Instance = this;
         }
 
+        private void OnDestroy()
+        {
+            if (Instance == this) Instance = null;
+        }
+
         private void Start()
         {
-            // Auto-count jika belum diset manual
             if (totalCleanableObjects == 0)
                 totalCleanableObjects = FindObjectsByType<Interaction.CleanableObject>(FindObjectsSortMode.None).Length;
             if (totalEvidenceItems == 0)
@@ -59,7 +63,6 @@ namespace HiddenResidue.Core
 
         // ─── Public API ──────────────────────────────────────────────────────
 
-        /// <summary>Dipanggil oleh CleanableObject setelah selesai dibersihkan.</summary>
         public void RegisterCleaned()
         {
             cleanedCount = Mathf.Min(cleanedCount + 1, totalCleanableObjects);
@@ -67,7 +70,6 @@ namespace HiddenResidue.Core
             CheckLevelComplete();
         }
 
-        /// <summary>Dipanggil oleh EvidenceObject saat barang bukti diambil.</summary>
         public void RegisterEvidenceFound()
         {
             evidenceCount = Mathf.Min(evidenceCount + 1, totalEvidenceItems);
@@ -88,7 +90,11 @@ namespace HiddenResidue.Core
             {
                 Debug.Log($"[LevelManager] Level Complete: {levelName}");
                 ScoreManager.Instance?.AddLevelBonus();
-                GameManager.Instance?.TriggerLevelComplete(); // biarkan GameManager yang urus
+
+                // ── FIX: Hapus LevelCompleteUI.Instance?.Show() dari sini ────
+                // Cukup panggil TriggerLevelComplete() — GameManager yang handle Show()
+                // Memanggil Show() dua kali menyebabkan Instance null saat scene pertama load
+                GameManager.Instance?.TriggerLevelComplete();
             }
         }
     }
