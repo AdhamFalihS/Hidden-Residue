@@ -93,13 +93,20 @@ namespace HiddenResidue.Interaction
 
             while (progress < 1f)
             {
-                if (player == null) yield break;
+                if (player == null)
+                {
+                    CancelCleaning();
+                    yield break;
+                }
 
-                float dist = Vector2.Distance(player.position, transform.position);
+                // 🔥 Cek jarak saat sedang cleaning
+                Collider2D col = GetComponent<Collider2D>();
+                Vector2 closest = col.ClosestPoint(player.position);
+                float dist = Vector2.Distance(player.position, closest);
 
-                // 🔥 Keluar dari radius → cancel
                 if (dist > interactionRadius)
                 {
+                    // reset progress (bukan langsung selesai)
                     CancelCleaning();
                     yield break;
                 }
