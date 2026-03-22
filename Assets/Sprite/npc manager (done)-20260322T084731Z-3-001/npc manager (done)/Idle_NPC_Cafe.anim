@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle_Jojo
+  m_Name: Idle_NPC_Cafe
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,11 +21,11 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: 7618241661640986916, guid: 2664cfa5159feaa4a8113efc5f60fb3b, type: 3}
+      value: {fileID: -7255003003039769305, guid: 42c60461a58ccc146afc4fcf8977c3c2, type: 3}
     - time: 0.33333334
-      value: {fileID: -1000050128343550195, guid: 1bd99a110cf92fd4ab59ee529e9a3bb5, type: 3}
+      value: {fileID: 3031379911860400297, guid: 9b79dee929c18d745ba5127a9e959d12, type: 3}
     - time: 0.5833333
-      value: {fileID: 7618241661640986916, guid: 2664cfa5159feaa4a8113efc5f60fb3b, type: 3}
+      value: {fileID: -7255003003039769305, guid: 42c60461a58ccc146afc4fcf8977c3c2, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -48,9 +48,9 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: 7618241661640986916, guid: 2664cfa5159feaa4a8113efc5f60fb3b, type: 3}
-    - {fileID: -1000050128343550195, guid: 1bd99a110cf92fd4ab59ee529e9a3bb5, type: 3}
-    - {fileID: 7618241661640986916, guid: 2664cfa5159feaa4a8113efc5f60fb3b, type: 3}
+    - {fileID: -7255003003039769305, guid: 42c60461a58ccc146afc4fcf8977c3c2, type: 3}
+    - {fileID: 3031379911860400297, guid: 9b79dee929c18d745ba5127a9e959d12, type: 3}
+    - {fileID: -7255003003039769305, guid: 42c60461a58ccc146afc4fcf8977c3c2, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using HiddenResidue.UI;
 
 namespace HiddenResidue.Core
 {
@@ -87,7 +88,7 @@ namespace HiddenResidue.Core
             {
                 Debug.Log($"[LevelManager] Level Complete: {levelName}");
                 ScoreManager.Instance?.AddLevelBonus();
-                GameManager.Instance?.TriggerLevelComplete();
+                GameManager.Instance?.TriggerLevelComplete(); // biarkan GameManager yang urus
             }
         }
     }

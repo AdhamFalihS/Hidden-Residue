@@ -17,7 +17,14 @@ namespace HiddenResidue.UI
         // ─────────────────────────────────────────────────────────────────────
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
             Instance = this;
+            // Jangan DontDestroyOnLoad karena ini UI per-scene
+            
             if (completePanel) completePanel.SetActive(false);
         }
 

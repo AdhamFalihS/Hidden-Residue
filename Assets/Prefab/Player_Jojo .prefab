@@ -124,7 +124,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -4.46, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.27875137, y: 0.27875137, z: 0.27875137}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2003500674661926480}
@@ -177,9 +177,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 3b4444f2b1bd4094eb38ef86b8f4cfae, type: 3}
+  m_Sprite: {fileID: 7618241661640986916, guid: 2664cfa5159feaa4a8113efc5f60fb3b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -251,10 +251,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Player.PlayerMovement
   moveSpeed: 4
-  acceleration: 25
-  deceleration: 70
-  paramSpeedX: SpeedX
-  paramSpeedY: SpeedY
+  acceleration: 15
+  deceleration: 75
+  paramMoveX: MoveX
+  paramMoveY: MoveY
+  paramSpeed: Speed
 --- !u!114 &7510644004683566710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -319,8 +320,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2.2, y: 2.8}
+  m_Offset: {x: -0.6108922, y: -5.9030123}
+  m_Size: {x: 2.422173, y: 4.7286735}
   m_Direction: 0
 --- !u!114 &402132895923707910
 MonoBehaviour:
