@@ -10,12 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 412804b0908ab424f958263edd940644, type: 3}
-  m_Name: Cleaning_Dirty
+  m_Name: DialogData_
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Dialog.DialogData
   lines:
   - speakerName: Jojo
-    text: Ada tumpahan kopi di meja ini.
+    text: haiii
     portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   - speakerName: Jojo
-    text: Aku harus membersihkannya sebelum lanjut.
+    text: ityha ada apa
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Jojo
+    text: gapapa si
     portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}

@@ -94,11 +94,13 @@ namespace HiddenResidue.Core
         // ─────────────────────────────────────────────────────────────────────
         public void TriggerFail()
         {
+            Debug.Log("TRIGGER FAIL DIPANGGIL");
+
             SetState(GameState.Failed);
 
             if (UI.FailScreenUI.Instance == null)
             {
-                Debug.LogError("[GameManager] FailScreenUI NULL!");
+                Debug.LogError("FailScreenUI NULL!");
                 return;
             }
 

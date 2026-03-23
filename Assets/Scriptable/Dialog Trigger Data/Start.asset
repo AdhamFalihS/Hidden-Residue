@@ -15,11 +15,11 @@ MonoBehaviour:
   lines:
   - speakerName: Jojo
     text: Tempat ini terlihat seperti coffee shop biasa...
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   - speakerName: Jojo
     text: Tapi polisi memasang garis pembatas di mana-mana.
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   - speakerName: Jojo
     text: Tugasku hanya membersihkan tempat ini... tapi sepertinya ada sesuatu yang
       aneh.
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}

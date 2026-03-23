@@ -15,10 +15,10 @@ MonoBehaviour:
   lines:
   - speakerName: Jojo
     text: Apa ini?
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   - speakerName: Jojo
     text: Kartu identitas seseorang.
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   - speakerName: Jojo
     text: Kenapa kartu ini tertinggal di sini?
-    portrait: {fileID: 3153539378023671787, guid: 62e3a8642134d66419f4ad4770b670c4, type: 3}
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}

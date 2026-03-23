@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2003500674661926480}
   - component: {fileID: 3299464791867937664}
   m_Layer: 0
-  m_Name: indikator
+  m_Name: 'indikator_[E]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 4830486660094642860}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.09, y: 2.48, z: 0}
-  m_LocalScale: {x: 0.54038, y: 0.54038, z: 0.54038}
+  m_LocalPosition: {x: 0.09, y: 11.01, z: 0}
+  m_LocalScale: {x: 1.3191698, y: 1.3191698, z: 1.3191698}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7689983196604322949}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b207f000bfedd1345999ba88f2373e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Interaction.InteractionDetector
-  detectRadius: 1.5
+  detectRadius: 1.33
   interactLayer:
     serializedVersion: 2
     m_Bits: 64

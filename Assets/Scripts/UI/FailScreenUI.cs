@@ -37,7 +37,17 @@ namespace HiddenResidue.UI
         /// <summary>Tampilkan layar gagal. Dipanggil oleh GameManager.TriggerFail().</summary>
         public void Show()
         {
-            if (failPanel) failPanel.SetActive(true);
+            Debug.Log("FAIL PANEL SHOW DIPANGGIL");
+
+            if (failPanel != null)
+            {
+                failPanel.SetActive(true);
+                Debug.Log("FAIL PANEL AKTIF");
+            }
+            else
+            {
+                Debug.LogError("PANEL NULL!");
+            }
         }
 
         /// <summary>Dipanggil oleh tombol "Coba Lagi".</summary>

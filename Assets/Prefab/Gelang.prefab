@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 932718749603187232}
   - component: {fileID: 9123940993113750117}
   m_Layer: 6
-  m_Name: Kartu_Identitas
+  m_Name: Gelang
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 807456893564079626, guid: a74a9e898ab0a6f46bdf601e0aa03bdb, type: 3}
+  m_Sprite: {fileID: -1335262011054371805, guid: 2ae0fbab2c63d0e4a8e6dbe6b8b00cb4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,7 +105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51e1e63226e0e16489c8def6aa1a64fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Evidence.EvidenceObject
-  data: {fileID: 11400000, guid: 13fdffce7997a2a4093b2ba24d061623, type: 2}
+  data: {fileID: 11400000, guid: c43698649232e1440b0ad9ea196fd1c1, type: 2}
   enableGlow: 1
   glowRadius: 4
   glowSpeed: 2
@@ -149,7 +149,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 11.36, y: 6.52}
+    oldSize: {x: 2.91, y: 1.54}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

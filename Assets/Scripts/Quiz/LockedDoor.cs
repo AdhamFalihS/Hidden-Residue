@@ -1,10 +1,11 @@
 using UnityEngine;
+using System.Collections;
 
 namespace HiddenResidue.Quiz
 {
     /// <summary>
     /// LockedDoor — Pintu yang memiliki dua state visual (Locked & Open).
-    /// Attach script ini ke Parent Object (misal: QuizDoor).
+    /// Sekarang sudah mendukung pre-quiz message seperti NPCQuizGiver.
     /// </summary>
     public class LockedDoor : MonoBehaviour, Interaction.IInteractable
     {
@@ -21,6 +22,10 @@ namespace HiddenResidue.Quiz
         [Header("Settings")]
         [SerializeField] private string lockedPrompt = "Tekan E — Jawab Kuis untuk Membuka";
 
+        [Header("Dialog (Opsional)")]
+        [Tooltip("Teks yang muncul sebelum quiz dimulai")]
+        [SerializeField] private string preQuizMessage = "Jawab kuis untuk membuka pintu!";
+
         [Header("Audio (Opsional)")]
         [SerializeField] private AudioClip openSound;
         [SerializeField] private AudioClip lockedSound;
@@ -35,13 +40,12 @@ namespace HiddenResidue.Quiz
 
         private void Awake()
         {
-            // Mengambil AudioSource dari object ini (jika ada)
             audioSource = GetComponent<AudioSource>();
         }
 
         private void Start()
         {
-            // Setup kondisi awal pintu saat game dimulai
+            // Setup kondisi awal pintu
             if (lockedVisual != null) lockedVisual.SetActive(true);
             if (openVisual != null)   openVisual.SetActive(false);
         }
@@ -50,10 +54,24 @@ namespace HiddenResidue.Quiz
         {
             if (isUnlocked || quizData == null) return;
 
-            // Suara saat mencoba buka pintu yang masih terkunci
-            if (lockedSound && audioSource) audioSource.PlayOneShot(lockedSound);
+            // Jalankan flow dengan message + delay
+            StartCoroutine(StartQuizFlow());
+        }
 
-            // Munculkan UI Kuis
+        private IEnumerator StartQuizFlow()
+        {
+            // Tampilkan pesan sebelum quiz (opsional)
+            if (!string.IsNullOrEmpty(preQuizMessage))
+            {
+                UI.NotificationUI.Show(preQuizMessage);
+                yield return new WaitForSeconds(1.5f); // delay biar kebaca
+            }
+
+            // Suara saat masih terkunci
+            if (lockedSound && audioSource)
+                audioSource.PlayOneShot(lockedSound);
+
+            // Mulai quiz
             QuizManager.Instance?.StartQuiz(quizData, OnQuizResult);
         }
 
@@ -69,14 +87,22 @@ namespace HiddenResidue.Quiz
         {
             isUnlocked = true;
 
-            // Tukar visual: Matikan yang terkunci, nyalakan yang terbuka
+            // Tukar visual
             if (lockedVisual != null) lockedVisual.SetActive(false);
             if (openVisual != null)   openVisual.SetActive(true);
 
-            // Play SFX Terbuka
-            if (openSound && audioSource) audioSource.PlayOneShot(openSound);
+            // Play SFX buka pintu
+            if (openSound && audioSource)
+                audioSource.PlayOneShot(openSound);
 
             Debug.Log($"[LockedDoor] {gameObject.name} berhasil dibuka!");
+        }
+
+        // Gizmos biar keliatan di editor (opsional)
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(transform.position, new Vector3(1f, 2f, 0f));
         }
     }
 }

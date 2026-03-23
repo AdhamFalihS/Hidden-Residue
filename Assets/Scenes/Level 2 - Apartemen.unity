@@ -1166,7 +1166,7 @@ SpriteRenderer:
   m_Size: {x: 14.31, y: 7.66}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &279094287
 Transform:
@@ -2045,10 +2045,10 @@ MonoBehaviour:
   smoothTime: 0.15
   offset: {x: 0, y: 0, z: -10}
   useBoundary: 0
-  minX: -10
-  maxX: 10
-  minY: -10
-  maxY: 10
+  left: -10
+  right: 10
+  top: 10
+  bottom: -10
 --- !u!1 &519489786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2426,6 +2426,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Core.GameManager
   mainMenuScene: MainMenu
+  gameplayObjects: []
+  pausePanel: {fileID: 0}
 --- !u!1 &698118858
 GameObject:
   m_ObjectHideFlags: 0
@@ -2457,12 +2459,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d2c4b00e4df6a2429e8ef6c1249f4d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Interaction.CleanableObject
+  cleanMode: 0
   dirtySprite: {fileID: 21300000, guid: 4374e0a7ca5e91547a4d049f088c9d2e, type: 3}
   cleanSprite: {fileID: 21300000, guid: 3b4444f2b1bd4094eb38ef86b8f4cfae, type: 3}
   cleanDuration: 2.5
   holdToClean: 1
-  progressBarRoot: {fileID: 2022737185}
-  progressSlider: {fileID: 1831569672}
+  interactionRadius: 1.5
+  progressImage: {fileID: 0}
   labelText: {fileID: 350035638}
   cleanEffect: {fileID: 0}
 --- !u!212 &698118860
@@ -2522,7 +2525,7 @@ SpriteRenderer:
   m_Size: {x: 2.2, y: 2.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &698118861
 Transform:
@@ -2642,7 +2645,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1279455693, guid: e08b56a30d761d44faf48029408e350a, type: 3}
+  m_Sprite: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2704,6 +2707,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42861d58aae66f245932ad1382c75013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Quiz.QuizManager
+  maxTimeBonus: 100
+  minTimeBonus: 10
 --- !u!1 &802768320
 GameObject:
   m_ObjectHideFlags: 0
@@ -2948,11 +2953,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Quiz.LockedDoor
   quizData: {fileID: 11400000, guid: d9adfac0de4c6654bbf572183f706837, type: 2}
-  doorObject: {fileID: 519489786}
-  doorBlocker: {fileID: 1077467040}
+  lockedVisual: {fileID: 0}
+  openVisual: {fileID: 0}
   lockedPrompt: "Tekan E \u2014 Jawab Kuis untuk Membuka"
-  doorAnimator: {fileID: 0}
-  openTrigger: Open
+  preQuizMessage: Jawab kuis untuk membuka pintu!
   openSound: {fileID: 0}
   lockedSound: {fileID: 0}
 --- !u!4 &1077467038
@@ -3028,7 +3032,7 @@ SpriteRenderer:
   m_Size: {x: 1.45, y: 0.85}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!61 &1077467040
 BoxCollider2D:
@@ -3588,8 +3592,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Player.PlayerMovement
   moveSpeed: 5
-  paramSpeedX: SpeedX
-  paramSpeedY: SpeedY
+  acceleration: 15
+  deceleration: 20
+  paramMoveX: MoveX
+  paramMoveY: MoveY
+  paramSpeed: Speed
 --- !u!95 &1282163419
 Animator:
   serializedVersion: 7
@@ -3696,7 +3703,7 @@ SpriteRenderer:
   m_Size: {x: 2.2, y: 2.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1282163422
 Transform:
@@ -5289,7 +5296,7 @@ SpriteRenderer:
   m_Size: {x: 22, y: 14.1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &2063390536
 Transform:
