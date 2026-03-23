@@ -1,34 +1,66 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HiddenResidue.Core
 {
     /// <summary>
-    /// ScoreManager — Singleton yang menyimpan dan mengelola skor pemain.
+    /// ScoreManager — Singleton DontDestroyOnLoad.
+    /// FIX: ResetScore() otomatis dipanggil saat scene di-reload (Retry).
+    /// Score hanya carry-over ke scene BARU (LoadNextLevel), bukan saat Retry.
     /// </summary>
     public class ScoreManager : MonoBehaviour
     {
-        // ─── Singleton ───────────────────────────────────────────────────────
         public static ScoreManager Instance { get; private set; }
 
-        // ─── Score Values (bisa diubah di Inspector) ─────────────────────────
         [Header("Score Values")]
         [SerializeField] private int cleanScore    = 10;
         [SerializeField] private int evidenceScore = 25;
         [SerializeField] private int quizScore     = 50;
         [SerializeField] private int levelBonus    = 100;
 
-        // ─── State ───────────────────────────────────────────────────────────
         public int CurrentScore { get; private set; }
 
-        // ─── Events ──────────────────────────────────────────────────────────
-        public static event System.Action<int, int> OnScoreChanged; // (added, total)
+        // Flag: apakah ini load level baru (bukan retry)?
+        private bool _isLoadingNextLevel = false;
 
-        // ─────────────────────────────────────────────────────────────────────
+        public static event System.Action<int, int> OnScoreChanged;
+
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (!_isLoadingNextLevel)
+            {
+                // Retry atau load scene apapun selain "next level" → reset score
+                ResetScore();
+                Debug.Log("[ScoreManager] Score di-reset karena scene di-load ulang (Retry).");
+            }
+            // Reset flag setelah dipakai
+            _isLoadingNextLevel = false;
+        }
+
+        /// <summary>
+        /// Panggil ini SEBELUM LoadNextLevel() agar score tidak di-reset.
+        /// Dipanggil oleh GameManager.LoadNextLevel().
+        /// </summary>
+        public void SetLoadingNextLevel()
+        {
+            _isLoadingNextLevel = true;
         }
 
         // ─── Public API ──────────────────────────────────────────────────────

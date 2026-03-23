@@ -47,7 +47,7 @@ namespace HiddenResidue.UI
             }
         }
 
-        private void OnSlotClicked()
+        public void OnSlotClicked()
         {
             onClickCallback?.Invoke(evidenceData);
         }
