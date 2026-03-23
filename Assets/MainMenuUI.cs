@@ -109,7 +109,7 @@ namespace HiddenResidue.UI
 
                 // Label tombol (opsional)
                 if (levelButtonTexts != null && i < levelButtonTexts.Length && levelButtonTexts[i] != null)
-                    levelButtonTexts[i].text = isUnlocked ? $"Level {i + 1}" : $"🔒 Level {i + 1}";
+                    levelButtonTexts[i].text = isUnlocked ? $"{i + 1}" : $" {i + 1}";
 
                 // Pasang listener — capture i dengan variabel lokal
                 int capturedIndex = buildIndex;

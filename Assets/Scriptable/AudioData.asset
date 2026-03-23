@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5bb3d9507a25424989665e4c919fe5a, type: 3}
+  m_Name: AudioData
+  m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Core.AudioData
+  bgmMainMenu: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
+  bgmLevel1: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
+  bgmLevel2: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
+  bgmLevel3: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
+  sfxButtonClick: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxPickupEvidence: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxCleaning: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxCleaningDone: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxQuizCorrect: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxQuizWrong: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxLevelComplete: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxFail: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxDoorOpen: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxDoorLocked: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
