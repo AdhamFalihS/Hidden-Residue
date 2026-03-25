@@ -4,25 +4,6 @@ using TMPro;
 
 namespace HiddenResidue.UI
 {
-    /// <summary>
-    /// MainMenuUI — Controller untuk scene Main Menu.
-    /// Tombol: Play → LevelSelect panel, Options → Settings panel, Exit → keluar game.
-    ///
-    /// Attach ke: GameObject "MainMenuUI" di Canvas.
-    ///
-    /// Struktur UI:
-    ///   Canvas
-    ///   └── MainMenuUI  ← script di sini
-    ///       ├── MainPanel
-    ///       │   ├── PlayButton
-    ///       │   ├── OptionsButton
-    ///       │   └── ExitButton
-    ///       └── LevelSelectPanel
-    ///           └── LevelGrid
-    ///               ├── LevelButton_1
-    ///               ├── LevelButton_2
-    ///               └── LevelButton_3 (dst)
-    /// </summary>
     public class MainMenuUI : MonoBehaviour
     {
         [Header("Panels")]
@@ -32,8 +13,8 @@ namespace HiddenResidue.UI
         [Header("Level Select")]
         [Tooltip("Drag semua LevelButton ke sini secara berurutan (index 0 = Level 1)")]
         [SerializeField] private Button[]            levelButtons;
-        [SerializeField] private TextMeshProUGUI[]   levelButtonTexts;  // opsional, untuk label
-        [SerializeField] private GameObject[]        lockIcons;          // opsional, ikon gembok
+        [SerializeField] private TextMeshProUGUI[]   levelButtonTexts;  
+        [SerializeField] private GameObject[]        lockIcons;        
 
         [Header("Scene Build Index")]
         [Tooltip("Build index scene level pertama. Biasanya 1 (0 = MainMenu).")]
@@ -44,20 +25,19 @@ namespace HiddenResidue.UI
             if (mainPanel        != null) mainPanel.SetActive(true);
             if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
 
-            // Play BGM Main Menu
             Core.AudioManager.Instance?.PlayBGM(Core.AudioManager.BGM.MainMenu);
 
             SetupLevelButtons();
         }
 
-        // ─── Tombol Main Menu ─────────────────────────────────────────────────
+
 
         public void OnPlayClicked()
         {
             Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             if (mainPanel        != null) mainPanel.SetActive(false);
             if (levelSelectPanel != null) levelSelectPanel.SetActive(true);
-            SetupLevelButtons(); // Refresh unlock status setiap kali dibuka
+            SetupLevelButtons(); 
         }
 
         public void OnOptionsClicked()
@@ -72,7 +52,7 @@ namespace HiddenResidue.UI
             Debug.Log("[MainMenu] Exit game.");
             Application.Quit();
 
-            // Di Editor, hentikan Play Mode
+
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #endif
@@ -85,7 +65,6 @@ namespace HiddenResidue.UI
             if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
         }
 
-        // ─── Level Select ─────────────────────────────────────────────────────
 
         private void SetupLevelButtons()
         {
@@ -100,18 +79,14 @@ namespace HiddenResidue.UI
                 int buildIndex  = firstLevelBuildIndex + i;
                 bool isUnlocked = progress == null || progress.IsLevelUnlocked(buildIndex);
 
-                // Aktif/nonaktif tombol
                 levelButtons[i].interactable = isUnlocked;
 
-                // Ikon gembok
                 if (lockIcons != null && i < lockIcons.Length && lockIcons[i] != null)
                     lockIcons[i].SetActive(!isUnlocked);
 
-                // Label tombol (opsional)
                 if (levelButtonTexts != null && i < levelButtonTexts.Length && levelButtonTexts[i] != null)
                     levelButtonTexts[i].text = isUnlocked ? $"{i + 1}" : $" {i + 1}";
 
-                // Pasang listener — capture i dengan variabel lokal
                 int capturedIndex = buildIndex;
                 levelButtons[i].onClick.RemoveAllListeners();
                 levelButtons[i].onClick.AddListener(() => LoadLevel(capturedIndex));
@@ -122,7 +97,6 @@ namespace HiddenResidue.UI
         {
             Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
 
-            // Reset score sebelum mulai level baru dari menu
             Core.ScoreManager.Instance?.ResetScore();
 
             Core.SceneLoader.Instance?.LoadScene(buildIndex);

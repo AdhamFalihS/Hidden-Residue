@@ -15,4 +15,4 @@ MonoBehaviour:
   evidenceName: Kartu Identitas
   description: Kartu identitas korban yang tertinggal di bawah meja.
   icon: {fileID: 807456893564079626, guid: a74a9e898ab0a6f46bdf601e0aa03bdb, type: 3}
-  evidenceID: evidence_001
+  evidenceID: evidence_004

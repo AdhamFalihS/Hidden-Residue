@@ -3,22 +3,6 @@ using UnityEngine.UI;
 
 namespace HiddenResidue.UI
 {
-    /// <summary>
-    /// SettingsUI — Panel settings/options yang bisa muncul di semua scene.
-    /// Menampilkan slider volume BGM & SFX serta toggle mute.
-    ///
-    /// Attach ke: GameObject "SettingsManager" yang SELALU AKTIF di Canvas.
-    /// (Sama seperti pola InventoryUI — jangan attach ke panel-nya langsung)
-    ///
-    /// Struktur UI:
-    ///   SettingsManager  ← Attach script di sini
-    ///   └── SettingsPanel  ← drag ke "Settings Panel"
-    ///       ├── BGMSlider      (Slider 0–1)
-    ///       ├── SFXSlider      (Slider 0–1)
-    ///       ├── BGMMuteToggle  (Toggle)
-    ///       ├── SFXMuteToggle  (Toggle)
-    ///       └── CloseButton    (Button → OnClick: SettingsUI.CloseSettings)
-    /// </summary>
     public class SettingsUI : MonoBehaviour
     {
         public static SettingsUI Instance { get; private set; }
@@ -53,8 +37,6 @@ namespace HiddenResidue.UI
             Core.AudioManager.OnAudioSettingsChanged -= RefreshUI;
         }
 
-        // ─── Public API ──────────────────────────────────────────────────────
-
         public void OpenSettings()
         {
             if (settingsPanel != null) settingsPanel.SetActive(true);
@@ -73,8 +55,6 @@ namespace HiddenResidue.UI
             else OpenSettings();
         }
 
-        // ─── Dipanggil oleh Slider.OnValueChanged di Inspector ───────────────
-
         public void OnBGMSliderChanged(float value)
         {
             if (_isInitializing) return;
@@ -86,8 +66,6 @@ namespace HiddenResidue.UI
             if (_isInitializing) return;
             Core.AudioManager.Instance?.SetSFXVolume(value);
         }
-
-        // ─── Dipanggil oleh Toggle.OnValueChanged di Inspector ───────────────
 
         public void OnBGMMuteToggleChanged(bool mute)
         {
@@ -101,15 +79,11 @@ namespace HiddenResidue.UI
             Core.AudioManager.Instance?.SetSFXMute(mute);
         }
 
-        // ─── Private ─────────────────────────────────────────────────────────
-
-        /// <summary>Sync UI dengan nilai AudioManager saat ini.</summary>
         private void RefreshUI()
         {
             var am = Core.AudioManager.Instance;
             if (am == null) return;
 
-            // Flag agar event onChange tidak trigger saat kita set nilai programatically
             _isInitializing = true;
 
             if (bgmSlider     != null) bgmSlider.value        = am.BGMVolume;
