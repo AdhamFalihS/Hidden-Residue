@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 using UnityEngine.UI;
 
@@ -16,11 +16,11 @@ namespace HiddenResidue.UI
 
         public static InventoryUI Instance { get; private set; }
 
-        [Header("Panel Root — assign InventoryUI_Panel di sini")]
+        [Header("Panel Root � assign InventoryUI_Panel di sini")]
 
         [SerializeField] private GameObject inventoryPanel;
 
-        [Header("Grid / List — assign Content (RectTransform) di sini")]
+        [Header("Grid / List � assign Content (RectTransform) di sini")]
 
         [SerializeField] private Transform  gridParent;
 
@@ -105,35 +105,21 @@ namespace HiddenResidue.UI
         }
 
         public void ToggleInventory()
-
         {
-
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             if (inventoryPanel == null)
-
             {
-
                 Debug.LogError("[InventoryUI] inventoryPanel NULL — assign di Inspector!");
-
                 return;
-
             }
-
             bool buka = !inventoryPanel.activeSelf;
-
             inventoryPanel.SetActive(buka);
-
             Debug.Log($"[InventoryUI] Panel {(buka ? "DIBUKA" : "DITUTUP")}");
-
             if (buka)
-
             {
-
                 if (detailPanel != null) detailPanel.SetActive(false);
-
                 RefreshGrid();
-
             }
-
         }
 
         public void RefreshGrid()
@@ -170,7 +156,7 @@ namespace HiddenResidue.UI
 
             var list = mgr.FoundEvidence;
 
-            Debug.Log($"[InventoryUI] RefreshGrid — {list.Count} evidence");
+            Debug.Log($"[InventoryUI] RefreshGrid � {list.Count} evidence");
 
             foreach (var ev in list)
 
@@ -218,7 +204,10 @@ namespace HiddenResidue.UI
 
                 btn.onClick.RemoveAllListeners();
 
-                btn.onClick.AddListener(() => TampilkanDetail(ev));
+                btn.onClick.AddListener(() => {
+                    Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+                    TampilkanDetail(ev);
+                });
 
             }
 
@@ -240,10 +229,20 @@ namespace HiddenResidue.UI
 
         }
 
-        public void CloseDetail()    { if (detailPanel != null) detailPanel.SetActive(false); }
+        public void CloseDetail()    { 
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+            if (detailPanel != null) detailPanel.SetActive(false); 
+        }
 
-        public void CloseInventory() { if (inventoryPanel != null) inventoryPanel.SetActive(false); }
+        public void CloseInventory() { 
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+            if (inventoryPanel != null) inventoryPanel.SetActive(false); 
+        }
 
     }
 
 }
+
+
+
+

@@ -92,6 +92,8 @@ namespace HiddenResidue.Quiz
 
             {
 
+                Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.QuizCorrect);
+
                 int timeBonus = CalculateTimeBonus(timeLeft, totalTime);
 
                 Core.ScoreManager.Instance?.AddScore(timeBonus);
@@ -107,6 +109,8 @@ namespace HiddenResidue.Quiz
             else
 
             {
+
+                Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.QuizWrong);
 
                 Debug.Log("[QuizManager] Salah!");
 

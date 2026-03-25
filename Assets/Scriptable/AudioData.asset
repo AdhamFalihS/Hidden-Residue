@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: AudioData
   m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Core.AudioData
   bgmMainMenu: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
-  bgmLevel1: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
+  bgmLevel1: {fileID: 8300000, guid: f88c3694296ed7e46a3fbfadee74a4d8, type: 3}
   bgmLevel2: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
   bgmLevel3: {fileID: 8300000, guid: 38c8e2f646208194786f510c1a010a2d, type: 3}
   sfxButtonClick: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxPickupEvidence: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxCleaning: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxCleaningDone: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxQuizCorrect: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxQuizWrong: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxLevelComplete: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
-  sfxFail: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxPickupEvidence: {fileID: 8300000, guid: 4c66ae692e34c5c4e8bd4429f0411556, type: 3}
+  sfxCleaning: {fileID: 8300000, guid: d7cb87fec0764fb4bb36c7b354009ed6, type: 3}
+  sfxCleaningDone: {fileID: 8300000, guid: 87919956ff09f4e418364a1bde7d9302, type: 3}
+  sfxQuizCorrect: {fileID: 8300000, guid: 239928a79874fb1418a0f1edd8ac8adb, type: 3}
+  sfxQuizWrong: {fileID: 8300000, guid: 2fc1410ed6f622c498453ed1089486aa, type: 3}
+  sfxLevelComplete: {fileID: 8300000, guid: e479467e098b8a34495bcc3f6fb92c30, type: 3}
+  sfxFail: {fileID: 8300000, guid: 437e3a26718bc444b8a59bdfeb68664f, type: 3}
   sfxDoorOpen: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
   sfxDoorLocked: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
+  sfxTyping: {fileID: 8300000, guid: f25f99191c70b4f4a8ce76dddca1a5f2, type: 3}

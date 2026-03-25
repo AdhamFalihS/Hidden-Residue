@@ -84,6 +84,7 @@ namespace HiddenResidue.UI
 
         {
 
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             Core.GameManager.Instance?.LoadNextLevel();
 
         }
@@ -92,6 +93,7 @@ namespace HiddenResidue.UI
 
         {
 
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             Core.GameManager.Instance?.GoToMainMenu();
 
         }

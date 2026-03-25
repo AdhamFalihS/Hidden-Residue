@@ -12,7 +12,7 @@ namespace HiddenResidue.Core
         public enum BGM  { None, MainMenu, Level1, Level2, Level3 }
         public enum SFX  { ButtonClick, PickupEvidence, Cleaning, CleaningDone,
                            QuizCorrect, QuizWrong, LevelComplete, Fail,
-                           DoorOpen, DoorLocked }
+                           DoorOpen, DoorLocked, Typing }
 
         [Header("Audio Data (ScriptableObject)")]
         [SerializeField] private AudioData audioData;
@@ -24,6 +24,7 @@ namespace HiddenResidue.Core
 
         private AudioSource _bgmSource;
         private AudioSource _sfxSource;
+        private AudioSource _sfxLoopSource;
         private BGM         _currentBGM = BGM.None;
 
         public float BGMVolume { get; private set; }
@@ -65,7 +66,7 @@ namespace HiddenResidue.Core
                 case "Level 1 - Coffee Shop":
                     PlayBGM(BGM.Level1);
                     break;
-                case "Level2":
+                case "Level 2 - Apartemen":
                     PlayBGM(BGM.Level2);
                     break;
                 case "Level3":
@@ -118,6 +119,26 @@ namespace HiddenResidue.Core
             AudioSource.PlayClipAtPoint(clip, worldPosition, SFXVolume);
         }
 
+        public void PlaySFXLoop(SFX sfx)
+        {
+            if (SFXMuted || _sfxLoopSource == null) return;
+
+            AudioClip clip = GetSFXClip(sfx);
+            if (clip == null) return;
+            if (_sfxLoopSource.isPlaying && _sfxLoopSource.clip == clip) return;
+
+            _sfxLoopSource.clip = clip;
+            _sfxLoopSource.volume = SFXVolume;
+            _sfxLoopSource.Play();
+        }
+
+        public void StopSFXLoop()
+        {
+            if (_sfxLoopSource == null) return;
+            if (_sfxLoopSource.isPlaying)
+                _sfxLoopSource.Stop();
+        }
+
         public void SetBGMVolume(float volume)
         {
             BGMVolume             = Mathf.Clamp01(volume);
@@ -165,6 +186,11 @@ namespace HiddenResidue.Core
             _sfxSource             = gameObject.AddComponent<AudioSource>();
             _sfxSource.loop        = false;
             _sfxSource.spatialBlend = 0f;
+
+            _sfxLoopSource         = gameObject.AddComponent<AudioSource>();
+            _sfxLoopSource.loop    = true;
+            _sfxLoopSource.spatialBlend = 0f;
+            _sfxLoopSource.playOnAwake = false;
         }
 
         private void LoadSettings()
@@ -205,6 +231,7 @@ namespace HiddenResidue.Core
                 SFX.Fail            => audioData.sfxFail,
                 SFX.DoorOpen        => audioData.sfxDoorOpen,
                 SFX.DoorLocked      => audioData.sfxDoorLocked,
+                SFX.Typing          => audioData.sfxTyping,
                 _                   => null
             };
         }

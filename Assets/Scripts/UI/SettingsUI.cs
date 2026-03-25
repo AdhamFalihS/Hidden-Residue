@@ -39,12 +39,14 @@ namespace HiddenResidue.UI
 
         public void OpenSettings()
         {
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             if (settingsPanel != null) settingsPanel.SetActive(true);
             RefreshUI();
         }
 
         public void CloseSettings()
         {
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             if (settingsPanel != null) settingsPanel.SetActive(false);
         }
 

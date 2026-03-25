@@ -168,6 +168,8 @@ namespace HiddenResidue.Evidence
 
             UI.ScorePopupUI.Show(transform.position, Core.ScoreManager.Instance?.GetEvidenceScore() ?? 25);
 
+            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.PickupEvidence);
+
             gameObject.SetActive(false);
 
             Debug.Log($"[EvidenceObject] SUCCESS: {data.evidenceName} added to inventory");

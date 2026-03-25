@@ -106,6 +106,10 @@ namespace HiddenResidue.Interaction
 
             if (isCleaned || isCleaning) return;
 
+            Core.AudioManager.Instance?.PlaySFXLoop(Core.AudioManager.SFX.Cleaning);
+
+            if (cleanEffect != null) cleanEffect.SetActive(true);
+
             if (labelText)
 
             {
@@ -168,14 +172,18 @@ namespace HiddenResidue.Interaction
 
                 }
 
-                if (holdToClean && !UnityEngine.InputSystem.Keyboard.current.eKey.isPressed)
-
+                if (holdToClean)
                 {
+                    if (!UnityEngine.InputSystem.Keyboard.current.eKey.isPressed)
+                    {
+                        if (cleanEffect != null) cleanEffect.SetActive(false);
+                        Core.AudioManager.Instance?.StopSFXLoop();
+                        yield return null;
+                        continue;
+                    }
 
-                    yield return null;
-
-                    continue;
-
+                    if (cleanEffect != null) cleanEffect.SetActive(true);
+                    Core.AudioManager.Instance?.PlaySFXLoop(Core.AudioManager.SFX.Cleaning);
                 }
 
                 progress += Time.deltaTime / cleanDuration;
@@ -202,6 +210,10 @@ namespace HiddenResidue.Interaction
 
             progress = 0f;
 
+            if (cleanEffect != null) cleanEffect.SetActive(false);
+
+            Core.AudioManager.Instance?.StopSFXLoop();
+
             if (progressImage)
 
             {
@@ -226,9 +238,14 @@ namespace HiddenResidue.Interaction
 
     isCleaning = false;
 
+    if (cleanEffect != null) cleanEffect.SetActive(false);
+
     if (progressImage) progressImage.gameObject.SetActive(false);
 
     if (labelText) labelText.gameObject.SetActive(false);
+
+    Core.AudioManager.Instance?.StopSFXLoop();
+    Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.CleaningDone);
 
     Core.ScoreManager.Instance?.AddCleanScore();
 
@@ -279,3 +296,4 @@ namespace HiddenResidue.Interaction
     }
 
 }
+

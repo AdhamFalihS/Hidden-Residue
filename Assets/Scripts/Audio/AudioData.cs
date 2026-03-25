@@ -23,6 +23,7 @@ namespace HiddenResidue.Core
         public AudioClip sfxFail;
         public AudioClip sfxDoorOpen;
         public AudioClip sfxDoorLocked;
+        public AudioClip sfxTyping;
 
     }
 }
