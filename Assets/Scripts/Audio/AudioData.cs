@@ -24,6 +24,8 @@ namespace HiddenResidue.Core
         public AudioClip sfxDoorOpen;
         public AudioClip sfxDoorLocked;
         public AudioClip sfxTyping;
+        [Header("SFX — Sound Effects")]
+        public AudioClip sfxFootstep; 
 
     }
 }

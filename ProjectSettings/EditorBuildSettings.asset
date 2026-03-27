@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 5eed0b9e48c9c624f984dd48a2a9d77d
   - enabled: 1
-    path: Assets/Scenes/Level 1 - Coffee Shop.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/Level Story/Level 1 - Coffee Shop.unity
+    guid: c8f1fb4330106254b8cf9777c974bdfd
   - enabled: 1
-    path: Assets/Scenes/Level 2 - Apartemen.unity
-    guid: 484291268a8507049aac98466c00e94b
+    path: Assets/Scenes/Level Story/Level 2 - Apartemen.unity
+    guid: aa49568fb75a9d645b1bdb86d1c1b048
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5710a096eaf56bc438f57e30adeb3314, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 99162a517bfb1f34b84bcce0d5c11c24, type: 3}

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b670e4b635faec444a7ec035e6c07756, type: 3}
+  m_Name: Minuman
+  m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Evidence.EvidenceData
+  evidenceName: Minuman
+  description: Mengapa ada minuman yang tidak habis , dan minuman ini belum basi
+  icon: {fileID: -3537000010362869672, guid: bbdde684da1de6749aca65159c96b1df, type: 3}
+  evidenceID: evidence_003

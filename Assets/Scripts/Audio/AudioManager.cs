@@ -10,7 +10,8 @@ namespace HiddenResidue.Core
         public enum BGM  { None, MainMenu, Level1, Level2, Level3 }
         public enum SFX  { ButtonClick, PickupEvidence, Cleaning, CleaningDone,
                            QuizCorrect, QuizWrong, LevelComplete, Fail,
-                           DoorOpen, DoorLocked, Typing }
+                           DoorOpen, DoorLocked, Typing,
+                           Footstep }
 
         [Header("Audio Data (ScriptableObject)")]
         [SerializeField] private AudioData audioData;
@@ -248,6 +249,7 @@ namespace HiddenResidue.Core
                 SFX.DoorOpen        => audioData.sfxDoorOpen,
                 SFX.DoorLocked      => audioData.sfxDoorLocked,
                 SFX.Typing          => audioData.sfxTyping,
+                SFX.Footstep        => audioData.sfxFootstep,
                 _ => null
             };
         }

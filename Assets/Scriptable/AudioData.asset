@@ -27,3 +27,4 @@ MonoBehaviour:
   sfxDoorOpen: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
   sfxDoorLocked: {fileID: 8300000, guid: 746be85251193144e81211070072a70e, type: 3}
   sfxTyping: {fileID: 8300000, guid: f25f99191c70b4f4a8ce76dddca1a5f2, type: 3}
+  sfxFootstep: {fileID: 8300000, guid: 6ec44ae1f07e33547bdeb1a91c8e71ba, type: 3}

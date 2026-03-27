@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412804b0908ab424f958263edd940644, type: 3}
+  m_Name: Tutorial
+  m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Dialog.DialogData
+  lines:
+  - speakerName: Jojo
+    text: Aku harus membersihkan tempat ini seperti sebelumnya
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Jojo
+    text: Mungkin ada sesuatu yang tersembunyi di balik sampah
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Jojo
+    text: Aku harus lebih teliti kali ini
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Jojo
+    text: "Souji\u2026 membersihkan, ya"
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Jojo
+    text: Setiap hal kecil bisa jadi petunjuk
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
