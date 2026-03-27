@@ -12,9 +12,9 @@ namespace HiddenResidue.UI
 
         [Header("Level Select")]
         [Tooltip("Drag semua LevelButton ke sini secara berurutan (index 0 = Level 1)")]
-        [SerializeField] private Button[]            levelButtons;
-        [SerializeField] private TextMeshProUGUI[]   levelButtonTexts;  
-        [SerializeField] private GameObject[]        lockIcons;        
+        [SerializeField] private Button[] levelButtons;
+        [SerializeField] private TextMeshProUGUI[] levelButtonTexts;
+        [SerializeField] private GameObject[] lockIcons;
 
         [Header("Scene Build Index")]
         [Tooltip("Build index scene level pertama. Biasanya 1 (0 = MainMenu).")]
@@ -22,7 +22,7 @@ namespace HiddenResidue.UI
 
         private void Start()
         {
-            if (mainPanel        != null) mainPanel.SetActive(true);
+            if (mainPanel != null) mainPanel.SetActive(true);
             if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
 
             Core.AudioManager.Instance?.PlayBGM(Core.AudioManager.BGM.MainMenu);
@@ -30,12 +30,10 @@ namespace HiddenResidue.UI
             SetupLevelButtons();
         }
 
-
-
         public void OnPlayClicked()
         {
             Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
-            if (mainPanel        != null) mainPanel.SetActive(false);
+            if (mainPanel != null) mainPanel.SetActive(false);
             if (levelSelectPanel != null) levelSelectPanel.SetActive(true);
             SetupLevelButtons(); 
         }
@@ -52,7 +50,6 @@ namespace HiddenResidue.UI
             Debug.Log("[MainMenu] Exit game.");
             Application.Quit();
 
-
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #endif
@@ -61,10 +58,9 @@ namespace HiddenResidue.UI
         public void OnBackToMainClicked()
         {
             Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
-            if (mainPanel        != null) mainPanel.SetActive(true);
+            if (mainPanel != null) mainPanel.SetActive(true);
             if (levelSelectPanel != null) levelSelectPanel.SetActive(false);
         }
-
 
         private void SetupLevelButtons()
         {
@@ -76,7 +72,7 @@ namespace HiddenResidue.UI
             {
                 if (levelButtons[i] == null) continue;
 
-                int buildIndex  = firstLevelBuildIndex + i;
+                int buildIndex = firstLevelBuildIndex + i;
                 bool isUnlocked = progress == null || progress.IsLevelUnlocked(buildIndex);
 
                 levelButtons[i].interactable = isUnlocked;

@@ -1,26 +1,17 @@
 ﻿using UnityEngine;
-
 using UnityEngine.SceneManagement;
 
 namespace HiddenResidue.Core
-
 {
-
     public class ScoreManager : MonoBehaviour
-
     {
-
         public static ScoreManager Instance { get; private set; }
 
         [Header("Score Values")]
-
-        [SerializeField] private int cleanScore    = 10;
-
+        [SerializeField] private int cleanScore = 10;
         [SerializeField] private int evidenceScore = 25;
-
-        [SerializeField] private int quizScore     = 50;
-
-        [SerializeField] private int levelBonus    = 100;
+        [SerializeField] private int quizScore = 50;
+        [SerializeField] private int levelBonus = 100;
 
         public int CurrentScore { get; private set; }
 

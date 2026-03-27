@@ -1,32 +1,22 @@
 ﻿using UnityEngine;
-
 using System.Collections.Generic;
-
 using HiddenResidue.UI;
 
 namespace HiddenResidue.Core
-
 {
-
     public class LevelManager : MonoBehaviour
-
     {
-
         public static LevelManager Instance { get; private set; }
 
         [Header("Level Info")]
-
         [SerializeField] private string levelName = "Level 1 - Coffee Shop";
 
         [Header("Tasks")]
-
         [Tooltip("Jumlah objek yang perlu dibersihkan di level ini")]
-
         [SerializeField] private int totalCleanableObjects = 0;
 
         [Tooltip("Jumlah barang bukti yang tersembunyi di level ini")]
-
-        [SerializeField] private int totalEvidenceItems    = 0;
+        [SerializeField] private int totalEvidenceItems = 0;
 
         [Header("Settings")]
 

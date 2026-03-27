@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 using UnityEngine.UI;
 
@@ -16,11 +16,11 @@ namespace HiddenResidue.UI
 
         public static InventoryUI Instance { get; private set; }
 
-        [Header("Panel Root � assign InventoryUI_Panel di sini")]
+        [Header("Panel Root ï¿½ assign InventoryUI_Panel di sini")]
 
         [SerializeField] private GameObject inventoryPanel;
 
-        [Header("Grid / List � assign Content (RectTransform) di sini")]
+        [Header("Grid / List ï¿½ assign Content (RectTransform) di sini")]
 
         [SerializeField] private Transform  gridParent;
 
@@ -109,7 +109,7 @@ namespace HiddenResidue.UI
             Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
             if (inventoryPanel == null)
             {
-                Debug.LogError("[InventoryUI] inventoryPanel NULL — assign di Inspector!");
+                Debug.LogError("[InventoryUI] inventoryPanel NULL â€” assign di Inspector!");
                 return;
             }
             bool buka = !inventoryPanel.activeSelf;
@@ -156,7 +156,7 @@ namespace HiddenResidue.UI
 
             var list = mgr.FoundEvidence;
 
-            Debug.Log($"[InventoryUI] RefreshGrid � {list.Count} evidence");
+            Debug.Log($"[InventoryUI] RefreshGrid ï¿½ {list.Count} evidence");
 
             foreach (var ev in list)
 
@@ -242,7 +242,4 @@ namespace HiddenResidue.UI
     }
 
 }
-
-
-
 

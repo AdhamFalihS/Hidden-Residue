@@ -1,22 +1,15 @@
 ﻿using UnityEngine;
-
 using TMPro;
-
 using System.Collections;
 
 namespace HiddenResidue.UI
-
 {
-
     public class FailScreenUI : MonoBehaviour
-
     {
-
         public static FailScreenUI Instance { get; private set; }
 
         [Header("Panel")]
-
-        [SerializeField] private GameObject  failPanel;
+        [SerializeField] private GameObject failPanel;
 
         private void Awake()
 

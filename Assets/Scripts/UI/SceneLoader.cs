@@ -11,7 +11,7 @@ namespace HiddenResidue.Core
 
         [Header("Loading UI")]
         [SerializeField] private GameObject loadingPanel;
-        [SerializeField] private Slider     progressBar;
+        [SerializeField] private Slider progressBar;
         [SerializeField] private TMPro.TextMeshProUGUI loadingText;
 
         [Header("Settings")]
@@ -26,7 +26,6 @@ namespace HiddenResidue.Core
             if (loadingPanel != null) loadingPanel.SetActive(false);
         }
 
-
         public void LoadScene(int buildIndex)
         {
             StartCoroutine(LoadAsync(buildIndex));
@@ -36,7 +35,6 @@ namespace HiddenResidue.Core
         {
             StartCoroutine(LoadAsyncByName(sceneName));
         }
-
 
         private IEnumerator LoadAsync(int buildIndex)
         {
@@ -51,8 +49,8 @@ namespace HiddenResidue.Core
         private IEnumerator DoLoad(AsyncOperation op)
         {
             if (loadingPanel != null) loadingPanel.SetActive(true);
-            if (progressBar  != null) progressBar.value = 0f;
-            if (loadingText  != null) loadingText.text  = "Memuat...";
+            if (progressBar != null) progressBar.value = 0f;
+            if (loadingText != null) loadingText.text = "Memuat...";
 
             op.allowSceneActivation = false;
 
@@ -64,10 +62,10 @@ namespace HiddenResidue.Core
 
                 float loadProgress = Mathf.Clamp01(op.progress / 0.9f);
                 float timeProgress = Mathf.Clamp01(elapsed / minLoadTime);
-                float display      = Mathf.Min(loadProgress, timeProgress);
+                float display = Mathf.Min(loadProgress, timeProgress);
 
                 if (progressBar != null) progressBar.value = display;
-                if (loadingText != null) loadingText.text  = $"Memuat... {Mathf.RoundToInt(display * 100)}%";
+                if (loadingText != null) loadingText.text = $"Memuat... {Mathf.RoundToInt(display * 100)}%";
 
                 if (op.progress >= 0.9f && elapsed >= minLoadTime)
                 {

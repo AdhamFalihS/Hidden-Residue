@@ -1,28 +1,19 @@
 ﻿using UnityEngine;
-
 using UnityEngine.InputSystem;
 
 namespace HiddenResidue.Interaction
-
 {
-
     public class InteractionDetector : MonoBehaviour
-
     {
-
         [Header("Detection")]
-
-        [SerializeField] private float   detectRadius = 1.5f;
-
+        [SerializeField] private float detectRadius = 1.5f;
         [SerializeField] private LayerMask interactLayer;
 
         [Header("Indicator")]
-
         [SerializeField] private GameObject pressEIndicator;
 
         private IInteractable currentTarget;
-
-        private GameObject    currentTargetGO;
+        private GameObject currentTargetGO;
 
         private void Update()
 

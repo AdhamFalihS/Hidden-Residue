@@ -1,25 +1,18 @@
 ﻿using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using TMPro;
 
 namespace HiddenResidue.UI
-
 {
-
     public class LevelCompleteUI : MonoBehaviour
-
     {
-
         public static LevelCompleteUI Instance { get; private set; }
 
         [Header("Panel")]
-
         [SerializeField] private GameObject completePanel;
 
         [Header("Teks")]
-
         [SerializeField] private TextMeshProUGUI totalScoreText;
-
         [SerializeField] private TextMeshProUGUI levelNameText;
 
         private void Awake()
@@ -74,7 +67,7 @@ namespace HiddenResidue.UI
 
             if (totalScoreText) totalScoreText.text = $"Total Skor: {score}";
 
-            if (levelNameText) levelNameText.text = "";
+            if (levelNameText) levelNameText.text = SceneManager.GetActiveScene().name;
 
             Debug.Log($"[LevelCompleteUI] Panel ditampilkan. Skor: {score}");
 

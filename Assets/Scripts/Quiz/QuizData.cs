@@ -1,20 +1,13 @@
 ﻿using UnityEngine;
 
 namespace HiddenResidue.Quiz
-
 {
-
     [System.Serializable]
-
     public class QuizQuestion
-
     {
-
         [TextArea(1, 3)]
-
-        public string questionText           = "Apa arti kata 'きれい' (kirei)?";
-
-        public string[] answers              = { "Kotor", "Bersih / Cantik", "Berbahaya", "Besar" };
+        public string questionText = "Apa arti kata 'きれい' (kirei)?";
+        public string[] answers = { "Kotor", "Bersih / Cantik", "Berbahaya", "Besar" };
 
         [Range(0, 3)]
 

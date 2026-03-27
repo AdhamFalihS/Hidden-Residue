@@ -1,19 +1,12 @@
 ﻿using UnityEngine;
-
 using UnityEngine.UI;
-
 using TMPro;
-
 using UnityEngine.InputSystem;
 
 namespace HiddenResidue.UI
-
 {
-
     public class DialogBoxUI : MonoBehaviour
-
     {
-
         public static DialogBoxUI Instance { get; private set; }
 
         [Header("Panel Root")]

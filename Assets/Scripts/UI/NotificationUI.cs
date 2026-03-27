@@ -1,22 +1,15 @@
 ﻿using UnityEngine;
-
 using TMPro;
-
 using System.Collections;
 
 namespace HiddenResidue.UI
-
 {
-
     public class NotificationUI : MonoBehaviour
-
     {
-
         public static NotificationUI Instance { get; private set; }
 
         [Header("Panel")]
-
-        [SerializeField] private GameObject      notifPanel;
+        [SerializeField] private GameObject notifPanel;
 
         [SerializeField] private TextMeshProUGUI notifText;
 

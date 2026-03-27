@@ -1,38 +1,24 @@
 ﻿using UnityEngine;
-
 using UnityEngine.UI;
-
 using System.Collections;
-
 using TMPro;
 
 namespace HiddenResidue.Interaction
-
 {
-
     public class CleanableObject : MonoBehaviour, IInteractable
-
     {
-
         public enum CleanMode
-
         {
-
-            ChangeSprite,
-
+            ChangeObject,
             DestroyObject
-
         }
 
         [Header("Mode")]
+        [SerializeField] private CleanMode cleanMode = CleanMode.ChangeObject;
 
-        [SerializeField] private CleanMode cleanMode = CleanMode.ChangeSprite;
-
-        [Header("Sprites")]
-
-        [SerializeField] private Sprite dirtySprite;
-
-        [SerializeField] private Sprite cleanSprite;
+        [Header("Objects")]
+        [SerializeField] private GameObject dirtyObject;
+        [SerializeField] private GameObject cleanObject;
 
         [Header("Cleaning")]
 
@@ -51,8 +37,23 @@ namespace HiddenResidue.Interaction
         [SerializeField] private TextMeshProUGUI labelText;
 
         [Header("Effects")]
-
         [SerializeField] private GameObject cleanEffect;
+
+        [Header("Reward (Opsional)")]
+        [Tooltip("Prefab item/barang yang di-spawn setelah bersih")]
+        [SerializeField] private GameObject rewardPrefab;
+
+        [Tooltip("Offset spawn reward dari posisi objek (misal: Vector2(0, 1) = di atas objek)")]
+        [SerializeField] private Vector2 rewardSpawnOffset = new Vector2(0f, 1f);
+
+        [Tooltip("Jika true, reward hanya bisa di-spawn sekali")]
+        [SerializeField] private bool oneTimeReward = true;
+
+        [Tooltip("Teks notifikasi setelah bersih")]
+        [SerializeField] private string rewardMessage = "Objek berhasil dibersihkan!";
+
+        [Header("Audio Reward (Opsional)")]
+        [SerializeField] private AudioClip rewardSound;
 
         public bool CanInteract => !isCleaned && !isCleaning;
 
@@ -64,40 +65,33 @@ namespace HiddenResidue.Interaction
 
         private float progress = 0f;
 
-        private SpriteRenderer sr;
-
         private Transform player;
 
+        private bool rewardGiven = false;
+
+        private AudioSource audioSource;
+
         private void Awake()
-
         {
-
-            sr = GetComponent<SpriteRenderer>();
-
+            audioSource = GetComponent<AudioSource>();
             var p = GameObject.FindGameObjectWithTag("Player");
-
             if (p != null)
-
                 player = p.transform;
 
-            if (cleanMode == CleanMode.ChangeSprite && dirtySprite != null)
-
-                sr.sprite = dirtySprite;
+            if (cleanMode == CleanMode.ChangeObject)
+            {
+                if (dirtyObject != null) dirtyObject.SetActive(true);
+                if (cleanObject != null) cleanObject.SetActive(false);
+            }
 
             if (labelText != null)
-
                 labelText.gameObject.SetActive(false);
 
             if (progressImage != null)
-
             {
-
                 progressImage.fillAmount = 0f;
-
                 progressImage.gameObject.SetActive(false);
-
             }
-
         }
 
         public void Interact()
@@ -263,34 +257,68 @@ namespace HiddenResidue.Interaction
 
         Instantiate(cleanEffect, transform.position, Quaternion.identity);
 
-    if (cleanMode == CleanMode.ChangeSprite)
-
+    if (cleanMode == CleanMode.ChangeObject)
     {
-
-        if (cleanSprite != null)
-
-            sr.sprite = cleanSprite;
-
+        if (dirtyObject != null) dirtyObject.SetActive(false);
+        if (cleanObject != null) cleanObject.SetActive(true);
     }
-
     else if (cleanMode == CleanMode.DestroyObject)
-
     {
-
         Destroy(gameObject);
-
     }
 
+    SpawnReward();
 }
 
-        private void OnDrawGizmosSelected()
-
+        private void SpawnReward()
         {
+            if (oneTimeReward && rewardGiven) return;
 
-            Gizmos.color = Color.green;
+            if (rewardPrefab == null)
+            {
+                Debug.LogWarning("[CleanableObject] rewardPrefab belum di-assign, tidak ada item yang di-spawn.");
+                return;
+            }
 
-            Gizmos.DrawWireSphere(transform.position, interactionRadius);
+            Vector3 spawnPos = transform.position + (Vector3)rewardSpawnOffset;
+            GameObject spawned = Instantiate(rewardPrefab, spawnPos, Quaternion.identity);
+            Debug.Log($"[CleanableObject] Reward di-spawn: {spawned.name} di {spawnPos}");
 
+            if (!string.IsNullOrEmpty(rewardMessage))
+                UI.NotificationUI.Show(rewardMessage);
+
+            if (rewardSound != null)
+            {
+                if (audioSource != null)
+                    audioSource.PlayOneShot(rewardSound);
+                else
+                    AudioSource.PlayClipAtPoint(rewardSound, spawnPos);
+            }
+
+            if (oneTimeReward)
+                rewardGiven = true;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            // Hitung posisi spawn final
+            Vector3 spawnPos = transform.position + (Vector3)rewardSpawnOffset;
+
+            // 1. Gambar garis putus-putus atau biasa dari NPC ke titik spawn
+            Gizmos.color = Color.cyan; // Warna cyan agar beda dengan gizmos interaksi
+            Gizmos.DrawLine(transform.position, spawnPos);
+
+            // 2. Gambar bola solid kecil di titik spawn
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(spawnPos, 0.15f);
+
+            // 3. Gambar lingkaran kawat untuk menunjukkan area drop
+            Gizmos.DrawWireSphere(spawnPos, 0.2f);
+
+            // 4. Menampilkan label teks di Scene View (Hanya muncul di Editor)
+            #if UNITY_EDITOR
+            UnityEditor.Handles.Label(spawnPos + new Vector3(0.1f, 0.1f, 0), "Reward Drop Point");
+            #endif
         }
 
     }

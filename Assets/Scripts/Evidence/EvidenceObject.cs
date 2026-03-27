@@ -1,28 +1,18 @@
 ﻿using UnityEngine;
 
 namespace HiddenResidue.Evidence
-
 {
-
     public class EvidenceObject : MonoBehaviour, Interaction.IInteractable
-
     {
-
         [Header("Evidence Data")]
-
         [SerializeField] private EvidenceData data;
 
         [Header("Visual Hint")]
-
         [Tooltip("Aktifkan agar objek punya efek glow/shimmer saat player dekat")]
-
-        [SerializeField] private bool  enableGlow = true;
-
+        [SerializeField] private bool enableGlow = true;
         [SerializeField] private float glowRadius = 2f;
-
-        [SerializeField] private float glowSpeed  = 2f;
-
-        [SerializeField] private Color glowColor  = new Color(1f, 0.9f, 0.3f, 1f);
+        [SerializeField] private float glowSpeed = 2f;
+        [SerializeField] private Color glowColor = new Color(1f, 0.9f, 0.3f, 1f);
 
         [Header("Pickup Effect")]
 

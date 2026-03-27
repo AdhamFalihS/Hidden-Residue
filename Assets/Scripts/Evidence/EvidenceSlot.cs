@@ -1,21 +1,13 @@
 ﻿using UnityEngine;
-
 using UnityEngine.UI;
-
 using TMPro;
-
 using System;
 
 namespace HiddenResidue.UI
-
 {
-
     public class EvidenceSlot : MonoBehaviour
-
     {
-
         [SerializeField] private Image iconImage;
-
         [SerializeField] private TextMeshProUGUI nameText;
 
         [SerializeField] private Button button;

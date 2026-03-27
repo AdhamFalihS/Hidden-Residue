@@ -27,7 +27,6 @@ namespace HiddenResidue.Dialog
                 Destroy(gameObject);
                 return;
             }
-
             Instance = this;
         }
 

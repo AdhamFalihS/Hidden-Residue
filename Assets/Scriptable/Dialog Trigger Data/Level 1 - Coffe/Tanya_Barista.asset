@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 412804b0908ab424f958263edd940644, type: 3}
+  m_Name: Tanya_Barista
+  m_EditorClassIdentifier: Assembly-CSharp::HiddenResidue.Dialog.DialogData
+  lines:
+  - speakerName: Barista
+    text: Saya melihat korban duduk di sana sebelumnya
+    portrait: {fileID: 3031379911860400297, guid: b47a2cfe1983dea45927c62ba446236e, type: 3}
+  - speakerName: Barista
+    text: "Dia tidak sendirian\u2026 ada seseorang bersamanya"
+    portrait: {fileID: 3031379911860400297, guid: b47a2cfe1983dea45927c62ba446236e, type: 3}
+  - speakerName: Jojo
+    text: Apakah kamu melihat wajah orang itu?
+    portrait: {fileID: 7618241661640986916, guid: 0b9f28f6c91cd58438f2c43baa6062dd, type: 3}
+  - speakerName: Barista
+    text: "Tidak jelas\u2026 tapi mereka terlihat sedang berbicara serius "
+    portrait: {fileID: 3031379911860400297, guid: b47a2cfe1983dea45927c62ba446236e, type: 3}

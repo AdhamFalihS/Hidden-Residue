@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-
 using UnityEngine.SceneManagement;
 
 namespace HiddenResidue.Core
@@ -16,10 +15,9 @@ namespace HiddenResidue.Core
 
         [Header("Pause System")]
         [SerializeField] private GameObject[] gameplayObjects;
-        [SerializeField] private GameObject   pausePanel;
+        [SerializeField] private GameObject pausePanel;
 
         private void Awake()
-
         {
             Instance = this;
         }
@@ -61,12 +59,10 @@ namespace HiddenResidue.Core
         }
 
         private void SetGameplayActive(bool state)
-
         {
             if (gameplayObjects == null) return;
 
             foreach (var obj in gameplayObjects)
-
                 if (obj != null) obj.SetActive(state);
         }
 

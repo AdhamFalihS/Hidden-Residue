@@ -6,8 +6,8 @@ namespace HiddenResidue.Core
     {
         public static LevelProgressManager Instance { get; private set; }
 
-        private const string KeyPrefix     = "LevelUnlocked_";
-        private const int    FirstLevelIdx = 1;
+        private const string KeyPrefix = "LevelUnlocked_";
+        private const int FirstLevelIdx = 1;
 
         private void Awake()
         {
@@ -24,7 +24,6 @@ namespace HiddenResidue.Core
             return PlayerPrefs.GetInt(KeyPrefix + buildIndex, 0) == 1;
         }
 
-
         public void UnlockLevel(int buildIndex)
         {
             PlayerPrefs.SetInt(KeyPrefix + buildIndex, 1);
@@ -32,7 +31,6 @@ namespace HiddenResidue.Core
             Debug.Log($"[LevelProgressManager] Level {buildIndex} di-unlock.");
         }
 
-       
         public void ResetProgress()
         {
             for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++)

@@ -10,21 +10,44 @@ namespace HiddenResidue.UI
         [Header("Panel")]
         [SerializeField] private GameObject settingsPanel;
 
-        [Header("BGM Controls")]
+        [Header("Sliders")]
         [SerializeField] private Slider bgmSlider;
-        [SerializeField] private Toggle bgmMuteToggle;
-
-        [Header("SFX Controls")]
         [SerializeField] private Slider sfxSlider;
-        [SerializeField] private Toggle sfxMuteToggle;
 
-        private bool _isInitializing = false;
+        private bool _isUpdatingUI = false;
 
         private void Awake()
         {
-            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             Instance = this;
-            if (settingsPanel != null) settingsPanel.SetActive(false);
+
+            if (settingsPanel != null)
+                settingsPanel.SetActive(false);
+        }
+
+        private void Start()
+        {
+            var am = Core.AudioManager.Instance;
+            if (am == null)
+            {
+                Debug.LogError("AudioManager not found!");
+                return;
+            }
+
+            // ✅ Set initial value
+            _isUpdatingUI = true;
+            bgmSlider.value = am.BGMVolume;
+            sfxSlider.value = am.SFXVolume;
+            _isUpdatingUI = false;
+
+            // ✅ Listener (WAJIB)
+            bgmSlider.onValueChanged.AddListener(OnBGMSliderChanged);
+            sfxSlider.onValueChanged.AddListener(OnSFXSliderChanged);
         }
 
         private void OnEnable()
@@ -37,63 +60,49 @@ namespace HiddenResidue.UI
             Core.AudioManager.OnAudioSettingsChanged -= RefreshUI;
         }
 
+        private void OnBGMSliderChanged(float value)
+        {
+            if (_isUpdatingUI) return;
+
+            Core.AudioManager.Instance.SetBGMVolume(value);
+        }
+
+        private void OnSFXSliderChanged(float value)
+        {
+            if (_isUpdatingUI) return;
+
+            Core.AudioManager.Instance.SetSFXVolume(value);
+
+            // 🔥 BIAR TERASA REALTIME → play test sound
+            Core.AudioManager.Instance.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+        }
+
+        private void RefreshUI()
+        {
+            if (_isUpdatingUI) return;
+
+            var am = Core.AudioManager.Instance;
+            if (am == null) return;
+
+            _isUpdatingUI = true;
+
+            bgmSlider.value = am.BGMVolume;
+            sfxSlider.value = am.SFXVolume;
+
+            _isUpdatingUI = false;
+        }
+
         public void OpenSettings()
         {
-            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
-            if (settingsPanel != null) settingsPanel.SetActive(true);
+            Core.AudioManager.Instance.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+            settingsPanel.SetActive(true);
             RefreshUI();
         }
 
         public void CloseSettings()
         {
-            Core.AudioManager.Instance?.PlaySFX(Core.AudioManager.SFX.ButtonClick);
-            if (settingsPanel != null) settingsPanel.SetActive(false);
-        }
-
-        public void ToggleSettings()
-        {
-            if (settingsPanel == null) return;
-            if (settingsPanel.activeSelf) CloseSettings();
-            else OpenSettings();
-        }
-
-        public void OnBGMSliderChanged(float value)
-        {
-            if (_isInitializing) return;
-            Core.AudioManager.Instance?.SetBGMVolume(value);
-        }
-
-        public void OnSFXSliderChanged(float value)
-        {
-            if (_isInitializing) return;
-            Core.AudioManager.Instance?.SetSFXVolume(value);
-        }
-
-        public void OnBGMMuteToggleChanged(bool mute)
-        {
-            if (_isInitializing) return;
-            Core.AudioManager.Instance?.SetBGMMute(mute);
-        }
-
-        public void OnSFXMuteToggleChanged(bool mute)
-        {
-            if (_isInitializing) return;
-            Core.AudioManager.Instance?.SetSFXMute(mute);
-        }
-
-        private void RefreshUI()
-        {
-            var am = Core.AudioManager.Instance;
-            if (am == null) return;
-
-            _isInitializing = true;
-
-            if (bgmSlider     != null) bgmSlider.value        = am.BGMVolume;
-            if (sfxSlider     != null) sfxSlider.value        = am.SFXVolume;
-            if (bgmMuteToggle != null) bgmMuteToggle.isOn     = am.BGMMuted;
-            if (sfxMuteToggle != null) sfxMuteToggle.isOn     = am.SFXMuted;
-
-            _isInitializing = false;
+            Core.AudioManager.Instance.PlaySFX(Core.AudioManager.SFX.ButtonClick);
+            settingsPanel.SetActive(false);
         }
     }
 }

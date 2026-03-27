@@ -1,26 +1,18 @@
 ﻿using UnityEngine;
-
 using System.Collections;
 
 namespace HiddenResidue.Quiz
-
 {
-
     public class QuizManager : MonoBehaviour
-
     {
-
         public static QuizManager Instance { get; private set; }
 
         [Header("Time-Based Score")]
-
         [Tooltip("Skor maksimum jika menjawab di detik pertama")]
-
-        [SerializeField] private int maxTimeBonus  = 100;
+        [SerializeField] private int maxTimeBonus = 100;
 
         [Tooltip("Skor minimum meski menjawab di detik terakhir")]
-
-        [SerializeField] private int minTimeBonus  = 10;
+        [SerializeField] private int minTimeBonus = 10;
 
         private QuizData            currentQuiz;
 

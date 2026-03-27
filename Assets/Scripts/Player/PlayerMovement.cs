@@ -1,31 +1,19 @@
 ﻿using UnityEngine;
-
 using UnityEngine.InputSystem;
 
 namespace HiddenResidue.Player
-
 {
-
     [RequireComponent(typeof(Rigidbody2D))]
-
     [RequireComponent(typeof(Animator))]
-
     [RequireComponent(typeof(SpriteRenderer))]
-
     public class PlayerMovement : MonoBehaviour
-
     {
-
         [Header("Movement Settings")]
-
         [SerializeField] private float moveSpeed = 4f;
-
         [SerializeField] private float acceleration = 15f;
-
         [SerializeField] private float deceleration = 20f;
 
         [Header("Depth Scale Settings")]
-
         [SerializeField] private float scaleMultiplierMin = 0.8f;
 
         [SerializeField] private float scaleMultiplierMax = 1.2f;
